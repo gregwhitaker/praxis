@@ -38,10 +38,10 @@ public final class DatabaseMigrator {
      * @param args command-line arguments
      */
     public static void main(String... args) {
-        DatabaseMigratorConfig config = DatabaseMigratorConfig.get(args);
+        final DatabaseMigratorConfig config = DatabaseMigratorConfig.get(args);
 
         // Configure Datasource
-        HikariConfig hikariConfig = new HikariConfig();
+        final HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(config.getJdbcUrl());
         hikariConfig.setUsername(config.getUsername());
 
