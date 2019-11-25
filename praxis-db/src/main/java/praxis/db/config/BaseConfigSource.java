@@ -18,19 +18,8 @@ package praxis.db.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Configuration source that retrieves configuration from command line parameters.
- */
-public class CommandLineConfigSource extends BaseConfigSource {
-    private static final Logger LOG = LoggerFactory.getLogger(CommandLineConfigSource.class);
+public abstract class BaseConfigSource implements ConfigSource {
+    private static final Logger LOG = LoggerFactory.getLogger(BaseConfigSource.class);
 
-    @Override
-    public String get(String name) {
-        return null;
-    }
 
-    @Override
-    public <T> T get(String name, Class<T> clazz) {
-        return null;
-    }
 }
