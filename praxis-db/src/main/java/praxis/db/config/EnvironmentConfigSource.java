@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Configuration source that retrieves values from environment variables.
  */
-public class EnvironmentConfigSource extends BaseConfigSource {
+public class EnvironmentConfigSource implements ConfigSource {
     private static final Logger LOG = LoggerFactory.getLogger(EnvironmentConfigSource.class);
 
     /**

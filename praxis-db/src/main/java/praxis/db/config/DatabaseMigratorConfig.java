@@ -18,6 +18,7 @@ package praxis.db.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,10 +36,15 @@ public final class DatabaseMigratorConfig {
      * @return database migrator configuration
      */
     public static DatabaseMigratorConfig get() {
-        DatabaseMigratorConfig config = new DatabaseMigratorConfig();
+        final DatabaseMigratorConfig config = new DatabaseMigratorConfig();
 
-        getConfigSourceChain();
-        return null;
+        // Resolve configuration options in order of precedent
+        getConfigSourceChain().forEach(configSource -> configSource.resolve(config));
+
+        // Validate that all required fields have been configured
+        config.validate();
+
+        return config;
     }
 
     /**
@@ -47,7 +53,11 @@ public final class DatabaseMigratorConfig {
      * @return a list containing the config sources to check in order
      */
     private static List<ConfigSource> getConfigSourceChain() {
-        return null;
+        List<ConfigSource> configSources = new ArrayList<>();
+        configSources.add(new EnvironmentConfigSource());
+        configSources.add(new CommandLineConfigSource());
+
+        return configSources;
     }
 
     private String jdbcUrl;
@@ -57,6 +67,10 @@ public final class DatabaseMigratorConfig {
 
     private DatabaseMigratorConfig() {
         // Prevent direct instantiation
+    }
+
+    void validate() {
+
     }
 
     public String getJdbcUrl() {

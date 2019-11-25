@@ -23,7 +23,7 @@ import static picocli.CommandLine.Option;
 /**
  * Configuration source that retrieves configuration from command line parameters.
  */
-public class CommandLineConfigSource extends BaseConfigSource {
+public class CommandLineConfigSource implements ConfigSource {
     private static final Logger LOG = LoggerFactory.getLogger(CommandLineConfigSource.class);
 
     @Override
