@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Greg Whitaker
+ * Copyright 2018-2019 Greg Whitaker
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,72 @@
  */
 package praxis.db;
 
-public class DatabaseMigrator {
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.flywaydb.core.Flyway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
 
+import javax.sql.DataSource;
+
+/**
+ * Handles versioning and setup of the mfactor database.
+ */
+public final class DatabaseMigrator {
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseMigrator.class);
+
+    private final DataSource dataSource;
+
+    /**
+     * Run a database migration from the command line.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String... args) {
+        // Parse Command-Line Arguments
+        DatabaseMigratorArgs config = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
 
+        // Configure Datasource
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(config.jdbcUrl);
+        hikariConfig.setUsername(config.username);
+
+        if (config.password != null) {
+            hikariConfig.setPassword(config.password);
+        }
+
+        LOG.info("Running command-line database migration for: {}", config.jdbcUrl);
+
+        // Start Migration
+        DatabaseMigrator migrator = new DatabaseMigrator(new HikariDataSource(hikariConfig));
+        migrator.run(config.env);
+    }
+
+    public DatabaseMigrator(final DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    /**
+     * Run database migration.
+     *
+     * @param env migration environment name or <code>null</code> if no environment is desired
+     */
+    public void run(String env) {
+        String[] locations;
+        if (env == null || env.isEmpty()) {
+            // No environment specified so just run the standard migration
+            locations = new String[]{"classpath:/db/migration"};
+        } else {
+            locations = new String[]{"classpath:/db/migration", "classpath:/db/data/" + env.toLowerCase()};
+        }
+
+        Flyway flyway = Flyway.configure()
+                .dataSource(dataSource)
+                .baselineOnMigrate(false)
+                .locations(locations)
+                .load();
+
+        flyway.migrate();
     }
 }
