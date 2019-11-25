@@ -36,7 +36,7 @@ public final class DatabaseMigratorConfig {
      * @return database migrator configuration
      */
     public static DatabaseMigratorConfig get() {
-        return DatabaseMigratorConfig.get(null);
+        return DatabaseMigratorConfig.get(new String[]{});
     }
 
     /**

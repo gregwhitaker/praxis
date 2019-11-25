@@ -15,7 +15,6 @@
  */
 package praxis.db.config;
 
-import com.sun.tools.javac.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,8 +46,6 @@ public class EnvironmentConfigSource implements ConfigSource {
 
     @Override
     public void resolve(final DatabaseMigratorConfig config) {
-        Assert.checkNonNull(config);
-
         LOG.debug("Resolving configuration properties via environment variables");
 
         if (System.getenv(EnvironmentVars.DB_JDBC_URL.getValue()) != null) {

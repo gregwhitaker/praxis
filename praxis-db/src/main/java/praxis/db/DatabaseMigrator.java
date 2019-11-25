@@ -20,7 +20,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import picocli.CommandLine;
 import praxis.db.config.DatabaseMigratorConfig;
 
 import javax.sql.DataSource;
@@ -39,9 +38,6 @@ public final class DatabaseMigrator {
      * @param args command-line arguments
      */
     public static void main(String... args) {
-//        // Parse Command-Line Arguments
-//        DatabaseMigratorArgs config = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
-//
         DatabaseMigratorConfig config = DatabaseMigratorConfig.get(args);
 
         // Configure Datasource

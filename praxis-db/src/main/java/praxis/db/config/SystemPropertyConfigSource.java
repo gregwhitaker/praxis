@@ -15,7 +15,6 @@
  */
 package praxis.db.config;
 
-import com.sun.tools.javac.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +43,6 @@ public class SystemPropertyConfigSource implements ConfigSource {
 
     @Override
     public void resolve(DatabaseMigratorConfig config) {
-        Assert.checkNonNull(config);
-
         LOG.debug("Resolving configuration properties via system properties");
 
         if (System.getenv(SystemProps.DB_JDBC_URL.getValue()) != null) {

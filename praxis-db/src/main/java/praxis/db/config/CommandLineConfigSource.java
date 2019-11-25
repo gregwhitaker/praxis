@@ -15,11 +15,9 @@
  */
 package praxis.db.config;
 
-import com.sun.tools.javac.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
-import praxis.db.DatabaseMigratorArgs;
 
 import static picocli.CommandLine.Option;
 
@@ -37,13 +35,11 @@ public class CommandLineConfigSource implements ConfigSource {
 
     @Override
     public void resolve(DatabaseMigratorConfig config) {
-        Assert.checkNonNull(config);
-
         if (args != null) {
             LOG.debug("Resolving configuration properties via command line arguments");
 
             // Parse Command-Line Arguments
-            DatabaseMigratorArgs parsedConfig = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
+            CommandLineArgs parsedConfig = CommandLine.populateCommand(new CommandLineArgs(), args);
 
             if (parsedConfig.jdbcUrl != null && !parsedConfig.jdbcUrl.isEmpty()) {
                 config.setJdbcUrl(parsedConfig.jdbcUrl);
