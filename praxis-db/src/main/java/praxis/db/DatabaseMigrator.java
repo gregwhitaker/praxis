@@ -21,6 +21,7 @@ import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
+import praxis.db.config.DatabaseMigratorConfig;
 
 import javax.sql.DataSource;
 

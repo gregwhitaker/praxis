@@ -18,6 +18,8 @@ package praxis.db.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static picocli.CommandLine.Option;
+
 /**
  * Configuration source that retrieves configuration from command line parameters.
  */
@@ -32,5 +34,23 @@ public class CommandLineConfigSource extends BaseConfigSource {
     @Override
     public <T> T get(String name, Class<T> clazz) {
         return null;
+    }
+
+    /**
+     * DatabaseMigrator command line arguments.
+     */
+    public static class CommandLineArgs {
+
+        @Option(names = { "--jdbcUrl" }, description = "Database jdbc connection url")
+        public String jdbcUrl;
+
+        @Option(names = { "--username" }, description = "Database username")
+        public String username;
+
+        @Option(names = { "--password" }, description = "Database password")
+        public String password;
+
+        @Option(names = { "--env" }, description = "Migration environment name")
+        public String env;
     }
 }

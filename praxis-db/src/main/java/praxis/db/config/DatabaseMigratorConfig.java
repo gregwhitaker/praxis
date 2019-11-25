@@ -19,10 +19,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Base class of all configuration sources.
+ * Configuration for the database migrator.
  */
-public abstract class BaseConfigSource implements ConfigSource {
-    private static final Logger LOG = LoggerFactory.getLogger(BaseConfigSource.class);
+public final class DatabaseMigratorConfig {
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseMigratorConfig.class);
 
+    /**
+     * Gets the database migrator configuration.
+     *
+     * @return
+     */
+    public static DatabaseMigratorConfig get() {
+        return null;
+    }
 
+    private DatabaseMigratorConfig() {
+        // Prevent direct instantiation
+    }
 }
