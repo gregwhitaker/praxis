@@ -20,21 +20,5 @@ package praxis.db.config;
  */
 public interface ConfigSource {
 
-    /**
-     * Get the configuration value by name.
-     *
-     * @param name configuration name
-     * @return the value if it exists; otherwise <code>null</code>
-     */
-    String get(String name);
-
-    /**
-     * Get the configuration value by name and cast to specified type.
-     *
-     * @param name configuration name
-     * @param clazz return type
-     * @param <T> return type
-     * @return the value if it exists; otherwise <code>null</code>
-     */
-    <T> T get(String name, Class<T> clazz);
+    void resolve(DatabaseMigratorConfig config);
 }

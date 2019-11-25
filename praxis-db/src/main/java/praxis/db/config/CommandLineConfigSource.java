@@ -27,13 +27,8 @@ public class CommandLineConfigSource extends BaseConfigSource {
     private static final Logger LOG = LoggerFactory.getLogger(CommandLineConfigSource.class);
 
     @Override
-    public String get(String name) {
-        return null;
-    }
+    public void resolve(DatabaseMigratorConfig config) {
 
-    @Override
-    public <T> T get(String name, Class<T> clazz) {
-        return null;
     }
 
     /**

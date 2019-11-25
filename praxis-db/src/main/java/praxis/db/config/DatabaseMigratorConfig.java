@@ -35,6 +35,8 @@ public final class DatabaseMigratorConfig {
      * @return database migrator configuration
      */
     public static DatabaseMigratorConfig get() {
+        DatabaseMigratorConfig config = new DatabaseMigratorConfig();
+
         getConfigSourceChain();
         return null;
     }

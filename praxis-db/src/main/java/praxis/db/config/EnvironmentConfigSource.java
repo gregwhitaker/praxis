@@ -24,15 +24,28 @@ import org.slf4j.LoggerFactory;
 public class EnvironmentConfigSource extends BaseConfigSource {
     private static final Logger LOG = LoggerFactory.getLogger(EnvironmentConfigSource.class);
 
-    @Override
-    public String get(String name) {
-        LOG.debug("Retrieving configuration from environment variable [name: '{}']", name);
-        return System.getenv(name);
+    /**
+     * Enumeration of configuration environment variables.
+     */
+    public enum EnvironmentVars {
+        DB_JDBC_URL("DB_JDBC_URL"),
+        DB_USERNAME("DB_USERNAME"),
+        DB_PASSWORD("DB_PASSWORD"),
+        DB_ENV("DB_ENV");
+
+        private final String value;
+
+        EnvironmentVars(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
     @Override
-    public <T> T get(String name, Class<T> clazz) {
-        LOG.debug("Retrieving configuration from environment variable [name: '{}', type: '{}'", name, clazz.getTypeName());
-        return null;
+    public void resolve(DatabaseMigratorConfig config) {
+
     }
 }
