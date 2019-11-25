@@ -30,6 +30,6 @@ allprojects {
     license {
         header rootProject.file('codequality/LICENSE_HEADER')
         strictCheck true
-        excludes([ "**/*.json", "**/*.html", "**/*.js", "**/*.jpg" ])
+        excludes([ "**/*.json", "**/*.html", "**/*.js", "**/*.jpg", "**/*.xml" ])
     }
 }

@@ -1,3 +1,5 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
 plugins {
     id "java"
     id "org.springframework.boot"
@@ -21,6 +23,15 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+// Testing
 test {
     useJUnitPlatform()
+}
+
+// Packaging
+task buildImage(type: DockerBuildImage, dependsOn: build) {
+    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName()}"]
+    dockerFile = file("${projectDir}/Dockerfile")
+    inputDir = file("${projectDir}")
+    tags = ["praxis/${projectDir.name}", "praxis/${projectDir.name}:${version}"]
 }
