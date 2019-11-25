@@ -25,7 +25,7 @@ import picocli.CommandLine;
 import javax.sql.DataSource;
 
 /**
- * Handles versioning and setup of the mfactor database.
+ * Handles versioning and setup of the praxis database.
  */
 public final class DatabaseMigrator {
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseMigrator.class);
