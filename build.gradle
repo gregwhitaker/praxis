@@ -11,12 +11,16 @@ plugins {
 buildScan {
     termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
+    publishOnFailure()
 }
 
 allprojects {
     apply plugin: "idea"
     apply plugin: "net.saliman.properties"
     apply plugin: "com.github.hierynomus.license"
+
+    group = 'com.github.gregwhitaker'
+    version = '0.1.0'
 
     repositories {
         mavenCentral()
