@@ -71,8 +71,13 @@ public final class DatabaseMigratorConfig {
         // Prevent direct instantiation
     }
 
-    void validate() {
-
+    /**
+     * Validates that all required fields are set on the configuration
+     */
+    private void validate() {
+        if (getJdbcUrl() == null || getJdbcUrl().isEmpty()) {
+            throw new MissingConfigurationException("jdbcUrl", getEnvironment());
+        }
     }
 
     public String getJdbcUrl() {
