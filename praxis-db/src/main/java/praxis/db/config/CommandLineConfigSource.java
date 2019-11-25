@@ -38,8 +38,10 @@ public class CommandLineConfigSource implements ConfigSource {
     @Override
     public void resolve(DatabaseMigratorConfig config) {
         Assert.checkNonNull(config);
-        
+
         if (args != null) {
+            LOG.debug("Resolving configuration properties via command line arguments");
+
             // Parse Command-Line Arguments
             DatabaseMigratorArgs parsedConfig = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
 
