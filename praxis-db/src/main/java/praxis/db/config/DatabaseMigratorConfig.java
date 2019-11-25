@@ -48,37 +48,52 @@ public final class DatabaseMigratorConfig {
         return null;
     }
 
-    private final String jdbcUrl;
-    private final String username;
-    private final String password;
-    private final String environment;
+    private String jdbcUrl;
+    private String username;
+    private String password;
+    private String environment;
 
-    private DatabaseMigratorConfig(final String jdbcUrl, final String username, final String password, final String environment) {
-        // Jdbc URL is required
-        if (jdbcUrl == null || jdbcUrl.isEmpty()) {
-            throw new MissingConfigurationException("jdbcUrl", environment);
-        } else {
-            this.jdbcUrl = jdbcUrl;
-        }
-        
-        this.username = username;
-        this.password = password;
-        this.environment = environment;
+    private DatabaseMigratorConfig() {
+        // Prevent direct instantiation
     }
 
     public String getJdbcUrl() {
         return jdbcUrl;
     }
 
+    // Package scoped so config source implementations in chain have access, but
+    // object is immutable once returned from builder
+    void setJdbcUrl(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    // Package scoped so config source implementations in chain have access, but
+    // object is immutable once returned from builder
+    void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
+    // Package scoped so config source implementations in chain have access, but
+    // object is immutable once returned from builder
+    void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEnvironment() {
         return environment;
+    }
+
+    // Package scoped so config source implementations in chain have access, but
+    // object is immutable once returned from builder
+    void setEnvironment(String environment) {
+        this.environment = environment;
     }
 }
