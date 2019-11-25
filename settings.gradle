@@ -1,0 +1,4 @@
+rootProject.name = 'praxis'
+include 'praxis-service'
+include 'praxis-db'
+
