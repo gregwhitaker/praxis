@@ -36,28 +36,30 @@ public final class DatabaseMigratorConfig {
      * @return database migrator configuration
      */
     public static DatabaseMigratorConfig get() {
+        return DatabaseMigratorConfig.get(null);
+    }
+
+    /**
+     * Gets the database migrator configuration.
+     *
+     * @return database migrator configuration
+     */
+    public static DatabaseMigratorConfig get(String... args) {
         final DatabaseMigratorConfig config = new DatabaseMigratorConfig();
 
-        // Resolve configuration options in order of precedent
-        getConfigSourceChain().forEach(configSource -> configSource.resolve(config));
+        // Define the config source hierarchy
+        List<ConfigSource> configSources = new ArrayList<>();
+        configSources.add(new EnvironmentConfigSource());
+        configSources.add(new SystemPropertyConfigSource());
+        configSources.add(new CommandLineConfigSource(args));
+
+        // Run the configuration source builders
+        configSources.forEach(configSource -> configSource.resolve(config));
 
         // Validate that all required fields have been configured
         config.validate();
 
         return config;
-    }
-
-    /**
-     * Gets the chain of config sources.
-     *
-     * @return a list containing the config sources to check in order
-     */
-    private static List<ConfigSource> getConfigSourceChain() {
-        List<ConfigSource> configSources = new ArrayList<>();
-        configSources.add(new EnvironmentConfigSource());
-        configSources.add(new CommandLineConfigSource());
-
-        return configSources;
     }
 
     private String jdbcUrl;

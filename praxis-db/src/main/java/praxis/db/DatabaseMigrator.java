@@ -39,23 +39,25 @@ public final class DatabaseMigrator {
      * @param args command-line arguments
      */
     public static void main(String... args) {
-        // Parse Command-Line Arguments
-        DatabaseMigratorArgs config = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
+//        // Parse Command-Line Arguments
+//        DatabaseMigratorArgs config = CommandLine.populateCommand(new DatabaseMigratorArgs(), args);
+//
+        DatabaseMigratorConfig config = DatabaseMigratorConfig.get(args);
 
         // Configure Datasource
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(config.jdbcUrl);
-        hikariConfig.setUsername(config.username);
+        hikariConfig.setJdbcUrl(config.getJdbcUrl());
+        hikariConfig.setUsername(config.getUsername());
 
-        if (config.password != null) {
-            hikariConfig.setPassword(config.password);
+        if (config.getPassword() != null) {
+            hikariConfig.setPassword(config.getPassword());
         }
 
-        LOG.info("Running command-line database migration for: {}", config.jdbcUrl);
+        LOG.info("Running command-line database migration for: {}", config.getJdbcUrl());
 
         // Start Migration
         DatabaseMigrator migrator = new DatabaseMigrator(new HikariDataSource(hikariConfig));
-        migrator.run(config.env);
+        migrator.run(config.getEnvironment());
     }
 
     public DatabaseMigrator(final DataSource dataSource) {
