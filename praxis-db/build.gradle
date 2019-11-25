@@ -1,16 +1,52 @@
-plugins {
-    id 'java'
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.postgresql:postgresql:42.2.5"
+    }
 }
 
-group 'com.github.gregwhitaker'
-version '0.1.0'
+plugins {
+    id "java"
+    id "application"
+    id "io.spring.dependency-management"
+    id "com.bmuschko.docker-remote-api"
+    id "org.flywaydb.flyway" version "6.0.8"
+}
 
-sourceCompatibility = 1.8
+mainClassName = 'praxis.db.DatabaseMigrator'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.zaxxer:HikariCP:3.3.0'
+    implementation 'org.flywaydb:flyway-core:6.0.8'
+    implementation 'info.picocli:picocli:3.9.3'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+
+    runtimeOnly 'org.postgresql:postgresql:42.2.5'
+}
+
+// Database
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/postgres'
+    user = 'postgres'
+    locations = ['filesystem:praxis-db/src/main/resources/db/migration',
+                 'filesystem:praxis-db/src/main/resources/db/data/local']
+}
+
+// Packaging
+task buildImage(type: DockerBuildImage, dependsOn: build) {
+    buildArgs = ['JAR_FILE': "${jar.getArchiveFileName()}"]
+    dockerFile = file("${projectDir}/Dockerfile")
+    inputDir = file("${projectDir}")
+    tags = ["mfactor/${projectDir.name}", "mfactor/${projectDir.name}:${version}"]
 }
