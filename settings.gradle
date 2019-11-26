@@ -1,4 +1,6 @@
 rootProject.name = 'praxis'
 include 'praxis-service'
 include 'praxis-db'
+include 'praxis-java'
+include 'demo'
 
