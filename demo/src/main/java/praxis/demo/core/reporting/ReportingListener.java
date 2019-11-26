@@ -54,7 +54,7 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
 
-        System.out.println(String.valueOf(os));
+        System.out.println(os);
         System.out.println("Booted: " + Instant.ofEpochSecond(os.getSystemBootTime()));
         System.out.println("Uptime: " + FormatUtil.formatElapsedSecs(os.getSystemUptime()));
         System.out.println("Running with" + (os.isElevated() ? "" : "out") + " elevated permissions.");
