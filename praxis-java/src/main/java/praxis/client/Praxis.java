@@ -15,8 +15,15 @@
  */
 package praxis.client;
 
+import com.lmax.disruptor.BusySpinWaitStrategy;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import praxis.client.event.PraxisEvent;
+import praxis.client.event.PraxisEventHandler;
 
 /**
  * Praxis client.
@@ -34,8 +41,22 @@ public final class Praxis {
     }
 
     private final PraxisConfiguration config;
+    private final RingBuffer<PraxisEvent> eventBuffer;
 
     Praxis(final PraxisConfiguration config) {
         this.config = config;
+
+        // Configure ring buffer for outgoing events
+        Disruptor<PraxisEvent> disruptor = new Disruptor<>(
+                PraxisEvent.EVENT_FACTORY,
+                1024,
+                DaemonThreadFactory.INSTANCE,
+                ProducerType.SINGLE,
+                new BusySpinWaitStrategy());
+
+        disruptor.handleEventsWith(new PraxisEventHandler());
+
+        // Start ring buffer for outgoing events
+        this.eventBuffer = disruptor.start();
     }
 }
