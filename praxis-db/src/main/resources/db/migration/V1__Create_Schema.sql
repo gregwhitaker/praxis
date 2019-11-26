@@ -14,3 +14,8 @@
 -- limitations under the License.
 --
 
+CREATE TABLE ingest_ledger (
+    id          BIGSERIAL   PRIMARY KEY,
+    ingest_ts   TIMESTAMP   DEFAULT now() NOT NULL,
+    data        BYTEA       NOT NULL
+);
