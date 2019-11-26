@@ -18,11 +18,13 @@ package praxis.service.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import praxis.service.service.IngestService;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class IngestLedgerController {
@@ -32,8 +34,9 @@ public class IngestLedgerController {
     private IngestService ingestService;
 
     @PostMapping("/usage/ingest")
-    public ResponseEntity<?> ingest(@RequestBody byte[] body) {
-        ingestService.ingest(body);
-        return ResponseEntity.accepted().build();
+    public Mono<ResponseEntity> ingest(@RequestBody byte[] body) {
+        return ingestService.ingest(body)
+                .map(aVoid -> new ResponseEntity(HttpStatus.ACCEPTED))
+                .onErrorReturn(new ResponseEntity(HttpStatus.BAD_REQUEST));
     }
 }

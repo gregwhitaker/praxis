@@ -19,7 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import praxis.service.data.ping.IngestLedgerDao;
+import praxis.service.data.ingest.IngestLedgerDao;
+import reactor.core.publisher.Mono;
 
 @Component
 public class IngestService {
@@ -28,7 +29,7 @@ public class IngestService {
     @Autowired
     private IngestLedgerDao ingestLedgerDao;
 
-    public void ingest(byte[] data) {
-
+    public Mono<Void> ingest(byte[] data) {
+        return ingestLedgerDao.save(data);
     }
 }
