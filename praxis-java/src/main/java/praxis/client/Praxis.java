@@ -15,11 +15,20 @@
  */
 package praxis.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Praxis client.
  */
 public final class Praxis {
+    private static final Logger LOG = LoggerFactory.getLogger(Praxis.class);
 
+    /**
+     * Fluent builder for creating a new instance of the {@link Praxis} client.
+     *
+     * @return the {@link PraxisBuilder} to use for creating a new Praxis client
+     */
     public static PraxisBuilder builder() {
         return new PraxisBuilder();
     }
