@@ -15,15 +15,30 @@
  */
 package praxis.client;
 
+/**
+ * Praxis client builder.
+ */
 public class PraxisBuilder {
 
     private final PraxisConfiguration config = new PraxisConfiguration();
 
+    /**
+     * Sets the hostname of the Praxis service to which to connect this client.
+     *
+     * @param hostname
+     * @return
+     */
     public PraxisBuilder hostname(String hostname) {
         this.config.setHostname(hostname);
         return this;
     }
 
+    /**
+     * Sets the port of the Praxis service to which to connect this client.
+     *
+     * @param port
+     * @return
+     */
     public PraxisBuilder port(int port) {
         this.config.setPort(port);
         return this;

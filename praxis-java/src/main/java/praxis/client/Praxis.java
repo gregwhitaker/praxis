@@ -15,6 +15,9 @@
  */
 package praxis.client;
 
+/**
+ * Praxis client.
+ */
 public final class Praxis {
 
     public static PraxisBuilder builder() {

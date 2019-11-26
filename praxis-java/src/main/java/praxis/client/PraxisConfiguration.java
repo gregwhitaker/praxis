@@ -28,10 +28,10 @@ final class PraxisConfiguration {
 
     @NotBlank(message = "Hostname is required")
     private String hostname;
-
+    
     @Min(value = 0, message = "Port number must be between 0 and 65535")
     @Max(value = 65_535, message = "Port number must be between 0 and 65535")
-    private int port;
+    private int port = 80;
 
     public String getHostname() {
         return hostname;
