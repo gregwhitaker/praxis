@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.service.service;
+package praxis.service.core.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import praxis.service.core.logging.LogMessage;
 
 @Component
 public class EventProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
 
+    /**
+     * Adds the event id to the ring buffer for later processing.
+     *
+     * @param eventId
+     */
     public void schedule(long eventId) {
-
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(LogMessage.builder()
+                    .withMessage("Event scheduled for processing")
+                    .withData("eventId", eventId)
+                    .build());
+        }
     }
 }

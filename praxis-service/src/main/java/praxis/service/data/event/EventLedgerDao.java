@@ -26,6 +26,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Component
 public class EventLedgerDao {
@@ -43,10 +45,11 @@ public class EventLedgerDao {
     public Mono<Long> save(byte[] data) {
         return Mono.defer(() -> {
             try (Connection conn = dataSource.getConnection()) {
-                final String sql = "INSERT INTO ingest_ledger (data) VALUES (?)";
+                final String sql = "INSERT INTO event_ledger (evt_ts, evt_data) VALUES (?, ?)";
 
                 try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                    ps.setBytes(1, data);
+                    ps.setTimestamp(1, Timestamp.from(Instant.now()));
+                    ps.setBytes(2, data);
                     ps.executeUpdate();
 
                     try (ResultSet rs = ps.getGeneratedKeys()) {
