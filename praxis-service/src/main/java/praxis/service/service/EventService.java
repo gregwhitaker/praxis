@@ -19,15 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import praxis.service.data.ingest.IngestLedgerDao;
+import praxis.service.data.event.EventLedgerDao;
 import reactor.core.publisher.Mono;
 
 @Component
-public class IngestService {
-    private static final Logger LOG = LoggerFactory.getLogger(IngestService.class);
+public class EventService {
+    private static final Logger LOG = LoggerFactory.getLogger(EventService.class);
 
     @Autowired
-    private IngestLedgerDao ingestLedgerDao;
+    private EventLedgerDao ingestLedgerDao;
 
     public Mono<Void> ingest(byte[] data) {
         return ingestLedgerDao.save(data);

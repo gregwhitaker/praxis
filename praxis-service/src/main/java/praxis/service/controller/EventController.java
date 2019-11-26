@@ -15,28 +15,26 @@
  */
 package praxis.service.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import praxis.service.service.IngestService;
+import praxis.service.service.EventService;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Function;
+
 @RestController
-public class IngestLedgerController {
-    private static final Logger LOG = LoggerFactory.getLogger(IngestLedgerController.class);
+public class EventController {
 
     @Autowired
-    private IngestService ingestService;
+    private EventService ingestService;
 
-    @PostMapping("/usage/ingest")
+    @PostMapping("/events")
     public Mono<ResponseEntity> ingest(@RequestBody byte[] body) {
         return ingestService.ingest(body)
-                .map(aVoid -> new ResponseEntity(HttpStatus.ACCEPTED))
-                .onErrorReturn(new ResponseEntity(HttpStatus.BAD_REQUEST));
+                .map((Function<Void, ResponseEntity>) aVoid -> ResponseEntity.status(202).build())
+                .onErrorReturn(ResponseEntity.badRequest().build());
     }
 }

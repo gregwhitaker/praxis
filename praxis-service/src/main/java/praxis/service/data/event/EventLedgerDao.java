@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.service.data.ingest;
+package praxis.service.data.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +27,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Component
-public class IngestLedgerDao {
-    private static final Logger LOG = LoggerFactory.getLogger(IngestLedgerDao.class);
+public class EventLedgerDao {
+    private static final Logger LOG = LoggerFactory.getLogger(EventLedgerDao.class);
 
     @Autowired
     private DataSource dataSource;
