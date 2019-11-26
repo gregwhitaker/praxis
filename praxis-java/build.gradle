@@ -5,6 +5,7 @@ plugins {
 sourceCompatibility = 1.8
 
 dependencies {
+    implementation 'io.projectreactor.netty:reactor-netty:0.9.1.RELEASE'
     implementation 'commons-lang:commons-lang:2.6'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.lmax:disruptor:3.4.2'
