@@ -38,3 +38,11 @@ task buildImage(type: DockerBuildImage, dependsOn: build) {
     inputDir = file("${projectDir}")
     tags = ["praxis/${projectDir.name}", "praxis/${projectDir.name}:${version}"]
 }
+
+// Local Development
+task bootRunLocal {
+    bootRun.configure {
+        systemProperty "spring.profiles.active", 'local'
+    }
+}
+bootRunLocal.finalizedBy bootRun
