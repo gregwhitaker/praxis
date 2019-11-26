@@ -29,11 +29,11 @@ import java.util.function.Function;
 public class EventController {
 
     @Autowired
-    private EventService ingestService;
+    private EventService eventService;
 
     @PostMapping("/events")
-    public Mono<ResponseEntity> ingest(@RequestBody byte[] body) {
-        return ingestService.ingest(body)
+    public Mono<ResponseEntity> ingestEvent(@RequestBody byte[] body) {
+        return eventService.ingestEvent(body)
                 .map((Function<Void, ResponseEntity>) aVoid -> ResponseEntity.status(202).build())
                 .onErrorReturn(ResponseEntity.badRequest().build());
     }

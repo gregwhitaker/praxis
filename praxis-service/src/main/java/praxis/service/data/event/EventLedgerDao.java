@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
@@ -34,24 +35,30 @@ public class EventLedgerDao {
     private DataSource dataSource;
 
     /**
-     * Save the data to the ingest ledger.
+     * Save the data to the ingestEvent ledger.
      *
      * @param data binary data to save
      * @return
      */
-    public Mono<Void> save(byte[] data) {
+    public Mono<Long> save(byte[] data) {
         return Mono.defer(() -> {
             try (Connection conn = dataSource.getConnection()) {
                 final String sql = "INSERT INTO ingest_ledger (data) VALUES (?)";
 
-                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     ps.setBytes(1, data);
-                    ps.execute();
+                    ps.executeUpdate();
 
-                    return Mono.empty();
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            return Mono.just(rs.getLong(1));
+                        }
+                    }
+
+                    throw new RuntimeException("Error occurred saving data to ingestEvent ledger");
                 }
             } catch (SQLException e) {
-                throw new RuntimeException("Error occurred saving data to ingest ledger", e);
+                throw new RuntimeException("Error occurred saving data to ingestEvent ledger", e);
             }
         });
     }

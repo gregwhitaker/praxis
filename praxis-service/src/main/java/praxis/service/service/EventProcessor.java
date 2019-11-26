@@ -15,31 +15,12 @@
  */
 package praxis.service.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import praxis.service.data.event.EventLedgerDao;
-import reactor.core.publisher.Mono;
 
 @Component
-public class EventService {
-    private static final Logger LOG = LoggerFactory.getLogger(EventService.class);
+public class EventProcessor {
 
-    @Autowired
-    private EventLedgerDao eventLedger;
+    public void schedule(long eventId) {
 
-    @Autowired
-    private EventProcessor eventProcessor;
-
-    /**
-     *
-     * @param data
-     * @return
-     */
-    public Mono<Void> ingestEvent(byte[] data) {
-        return eventLedger.save(data)
-                .doOnSuccess(eventId -> eventProcessor.schedule(eventId))
-                .then();
     }
 }
