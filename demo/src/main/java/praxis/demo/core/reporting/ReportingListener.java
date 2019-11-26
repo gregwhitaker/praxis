@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import oshi.util.FormatUtil;
+import praxis.client.Praxis;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -33,6 +35,9 @@ import java.time.Instant;
 @Component
 public class ReportingListener implements ApplicationListener<ContextRefreshedEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(ReportingListener.class);
+
+    @Autowired
+    private Praxis praxis;
 
     private License license;
 
