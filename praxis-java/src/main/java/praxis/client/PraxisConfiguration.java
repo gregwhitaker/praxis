@@ -15,9 +15,22 @@
  */
 package praxis.client;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+/**
+ * Praxis client configuration.
+ */
+@Valid
 final class PraxisConfiguration {
 
+    @NotBlank(message = "Hostname is required")
     private String hostname;
+
+    @Min(value = 0, message = "Port number must be between 0 and 65535")
+    @Max(value = 65_535, message = "Port number must be between 0 and 65535")
     private int port;
 
     public String getHostname() {
