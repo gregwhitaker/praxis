@@ -10,7 +10,7 @@ plugins {
 dependencies {
     implementation project(':praxis-java')
 
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 // Packaging
