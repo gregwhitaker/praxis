@@ -8,6 +8,8 @@ plugins {
 }
 
 dependencies {
+    implementation project(':praxis-java')
+
     implementation 'org.springframework.boot:spring-boot-starter'
 }
 
