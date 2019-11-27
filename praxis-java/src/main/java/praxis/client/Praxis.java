@@ -58,13 +58,17 @@ public final class Praxis {
         this.eventBuffer = disruptor.start();
     }
 
-    public void send(String message) {
+    public void send(final String message) {
+        sendInternal(message.getBytes());
+    }
+
+    private void sendInternal(final byte[] data) {
         long seq = this.eventBuffer.next();
 
         PraxisEvent eventToSend = this.eventBuffer.get(seq);
         eventToSend.setType(PraxisEventType.DATA.getValue());
         eventToSend.setTimestamp(System.currentTimeMillis());
-        eventToSend.setData(message.getBytes());
+        eventToSend.setData(data);
 
         this.eventBuffer.publish(seq);
     }
