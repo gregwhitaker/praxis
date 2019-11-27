@@ -15,13 +15,18 @@
  */
 package praxis.client.internal.event.encode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmax.disruptor.EventHandler;
-import praxis.client.internal.event.PraxisEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import praxis.client.internal.event.EventWrapper;
 
-public class EncodingEventHandler implements EventHandler<PraxisEvent> {
+public class EncodingEventHandler implements EventHandler<EventWrapper> {
+    private static final Logger LOG = LoggerFactory.getLogger(EncodingEventHandler.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
-    public void onEvent(PraxisEvent event, long sequence, boolean endOfBatch) throws Exception {
-        
+    public void onEvent(EventWrapper event, long sequence, boolean endOfBatch) throws Exception {
+
     }
 }

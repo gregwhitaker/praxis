@@ -15,16 +15,11 @@
  */
 package praxis.client.internal.event;
 
-public enum PraxisEventType {
-    DATA(1);
+public class EncodedDataEvent implements Event {
+    public static final int EVENT_TYPE = 2;
 
-    private final int value;
-
-    PraxisEventType(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
+    @Override
+    public int getType() {
+        return EVENT_TYPE;
     }
 }

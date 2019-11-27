@@ -17,12 +17,11 @@ package praxis.client.internal.event;
 
 import com.lmax.disruptor.EventFactory;
 
-public class PraxisEvent {
-    public static final EventFactory<PraxisEvent> EVENT_FACTORY = PraxisEvent::new;
+public class EventWrapper {
+    public final static EventFactory EVENT_FACTORY = EventWrapper::new;
 
     private int type;
-    private long timestamp;
-    private byte[] data;
+    private Event event;
 
     public int getType() {
         return type;
@@ -32,19 +31,11 @@ public class PraxisEvent {
         this.type = type;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

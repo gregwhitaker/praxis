@@ -22,7 +22,6 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.event.PraxisEvent;
 import praxis.client.internal.event.publish.PublishEventHandler;
 
 /**

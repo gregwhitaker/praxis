@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event.publish;
+package praxis.client.internal.event;
 
-import com.lmax.disruptor.EventHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import praxis.client.PraxisConfiguration;
-
-/**
- * 
- */
-public class PublishEventHandler implements EventHandler<PraxisEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(PublishEventHandler.class);
-
-    public PublishEventHandler(PraxisConfiguration config) {
-
-    }
+public class RawDataEvent implements Event {
+    public static final int EVENT_TYPE = 1;
 
     @Override
-    public void onEvent(PraxisEvent event, long sequence, boolean endOfBatch) throws Exception {
-
+    public int getType() {
+        return EVENT_TYPE;
     }
 }

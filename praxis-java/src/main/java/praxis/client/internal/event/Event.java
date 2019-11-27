@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event.encode;
+package praxis.client.internal.event;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+/**
+ * Interface that all events must implement.
+ */
+public interface Event {
 
-public class JsonEventEncoder {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    public static byte[] encode(Object obj, Class<?> clazz) throws JsonProcessingException {
-        return MAPPER.writerFor(clazz).writeValueAsBytes(obj);
-    }
+    /**
+     * Gets the type code of the event.
+     *
+     * @return event type code
+     */
+    int getType();
 }
