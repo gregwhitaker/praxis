@@ -22,11 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import praxis.service.config.settings.EncryptionSettings;
+import praxis.service.core.crypto.KeyStoreUtil;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * Service that manages the public encryption keys used for incoming events.
@@ -35,6 +37,8 @@ import java.nio.file.Paths;
 public class PublicKeyService {
     private static final Logger LOG = LoggerFactory.getLogger(PublicKeyService.class);
 
+    private static final String DEFAULT_KEYSTORE_NAME = "praxis.keystore";
+
     @Autowired
     public PublicKeyService(EncryptionSettings settings) {
         init(settings);
@@ -42,7 +46,7 @@ public class PublicKeyService {
 
     /**
      * Gets the public encryption key information as a JWK set.
-     * 
+     *
      * @return
      */
     public Mono<JWKSet> getKeys() {
@@ -57,6 +61,7 @@ public class PublicKeyService {
      * @param settings
      */
     private void init(final EncryptionSettings settings) {
+        // Checking for keystore directory configuration
         if (StringUtils.isEmpty(settings.getKeystoreDirectory())) {
             // TODO: fix this error handling
             throw new RuntimeException("");
@@ -65,6 +70,7 @@ public class PublicKeyService {
         // Create the keystore directory if it does not exist
         if (Files.notExists(Paths.get(settings.getKeystoreDirectory()))) {
             try {
+                LOG.debug("Creating new keystore directory [dir: '{}']", settings.getKeystoreDirectory());
                 Files.createDirectories(Paths.get(settings.getKeystoreDirectory()));
             } catch (IOException e) {
                 // TODO: fix this error handling
@@ -72,9 +78,18 @@ public class PublicKeyService {
             }
         }
 
-        // Create the keystore file if it does not exist
-        if (Files.notExists(Paths.get(settings.getKeystoreDirectory(), settings.getKeystoreName()))) {
+        // Checking for keystore name configuration
+        String keystoreName = DEFAULT_KEYSTORE_NAME;
+        if (StringUtils.isEmpty(settings.getKeystoreName())) {
+            LOG.warn("No property found for 'praxis.encryption.keystore-name'. Defaulting to '{}'", DEFAULT_KEYSTORE_NAME);
+        } else {
+            keystoreName = settings.getKeystoreName();
+        }
 
+        // Create the keystore file if it does not exist
+        if (Files.notExists(Paths.get(settings.getKeystoreDirectory(), keystoreName))) {
+            LOG.debug("Creating new keystore [dir: '{}', name: '{}']", settings.getKeystoreDirectory(), keystoreName);
+            KeyStoreUtil.create(Paths.get(settings.getKeystoreDirectory()), keystoreName);
         }
     }
 }
