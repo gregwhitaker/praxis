@@ -37,7 +37,7 @@ public class EventLedgerDao {
     private DataSource dataSource;
 
     /**
-     * Save the data to the ingestEvent ledger.
+     * Save the data to the consumeEvent ledger.
      *
      * @param data binary data to save
      * @return
@@ -58,10 +58,10 @@ public class EventLedgerDao {
                         }
                     }
 
-                    throw new RuntimeException("Error occurred saving data to ingestEvent ledger");
+                    throw new RuntimeException("Error occurred saving data to consumeEvent ledger");
                 }
             } catch (SQLException e) {
-                throw new RuntimeException("Error occurred saving data to ingestEvent ledger", e);
+                throw new RuntimeException("Error occurred saving data to consumeEvent ledger", e);
             }
         });
     }

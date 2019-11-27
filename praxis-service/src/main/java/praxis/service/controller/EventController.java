@@ -16,30 +16,50 @@
 package praxis.service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import praxis.service.service.EventService;
+import praxis.service.service.PublicKeyService;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
+/**
+ * Controller responsible for ingesting events into Praxis.
+ */
 @RestController
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/events/public_keys")
-    public Mono<ResponseEntity> getKeys() {
+    @Autowired
+    private PublicKeyService publicKeyService;
+
+    /**
+     * Get the public encryption key for event ingestion.
+     *
+     * @return
+     */
+    @GetMapping(value = "/events/public_key",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity> getKey() {
         return null;
     }
 
+    /**
+     * Receives incoming events.
+     *
+     * @param body event data
+     * @return returns an HTTP 202 if the event was successfully accepted for processing; otherwise an HTTP 400
+     */
     @PostMapping("/events")
-    public Mono<ResponseEntity> ingestEvent(@RequestBody byte[] body) {
-        return eventService.ingestEvent(body)
+    public Mono<ResponseEntity> consumeEvent(@RequestBody byte[] body) {
+        return eventService.consumeEvent(body)
                 .map((Function<Void, ResponseEntity>) aVoid -> ResponseEntity.status(202).build())
                 .onErrorReturn(ResponseEntity.badRequest().build());
     }

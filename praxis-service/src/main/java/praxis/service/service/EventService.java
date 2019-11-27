@@ -38,7 +38,7 @@ public class EventService {
      * @param data
      * @return
      */
-    public Mono<Void> ingestEvent(byte[] data) {
+    public Mono<Void> consumeEvent(byte[] data) {
         return eventLedger.save(data)
                 .doOnSuccess(eventId -> eventProcessor.schedule(eventId))
                 .then();
