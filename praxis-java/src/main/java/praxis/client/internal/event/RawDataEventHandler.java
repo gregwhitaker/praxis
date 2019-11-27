@@ -20,6 +20,9 @@ import com.lmax.disruptor.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Handles {@link RawDataEvent} messages.
+ */
 public class RawDataEventHandler implements EventHandler<EventWrapper> {
     private static final Logger LOG = LoggerFactory.getLogger(RawDataEventHandler.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -39,10 +42,7 @@ public class RawDataEventHandler implements EventHandler<EventWrapper> {
             encodedDataEvent.setTimestamp(rawDataEvent.getTimestamp());
             encodedDataEvent.setData(MAPPER.writerFor(rawDataEvent.getDatatype()).writeValueAsBytes(rawDataEvent.getData()));
 
-            event.setType(encodedDataEvent.getType());
-            event.setEvent(encodedDataEvent);
-
-            buffer.publish(sequence);
+            buffer.publish(encodedDataEvent);
         }
     }
 }

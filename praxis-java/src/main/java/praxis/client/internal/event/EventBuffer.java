@@ -21,7 +21,8 @@ public class EventBuffer {
                 new BusySpinWaitStrategy());
 
         // Assign event handlers to the ring buffer
-        disruptor.handleEventsWith(new RawDataEventHandler(this),
+        disruptor.handleEventsWith(
+                new RawDataEventHandler(this),
                 new EncodedDataEventHandler(config, this));
 
         // Start ring buffer for outgoing events
@@ -38,10 +39,6 @@ public class EventBuffer {
         eventWrapper.setEvent(event);
 
         // Publishing event to the ring buffer
-        this.ringBuffer.publish(seq);
-    }
-
-    public void publish(long seq) {
         this.ringBuffer.publish(seq);
     }
 }

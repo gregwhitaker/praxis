@@ -21,19 +21,23 @@ import org.slf4j.LoggerFactory;
 import praxis.client.PraxisConfiguration;
 
 /**
- * 
+ * Handles {@link EncodedDataEvent} messages.
  */
 public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
     private static final Logger LOG = LoggerFactory.getLogger(EncodedDataEventHandler.class);
 
-    public EncodedDataEventHandler(PraxisConfiguration config, EventBuffer buffer) {
+    private PraxisConfiguration config;
+    private EventBuffer buffer;
 
+    public EncodedDataEventHandler(PraxisConfiguration config, EventBuffer buffer) {
+        this.config = config;
+        this.buffer = buffer;
     }
 
     @Override
     public void onEvent(EventWrapper event, long sequence, boolean endOfBatch) throws Exception {
         if (event.getType() == EncodedDataEvent.EVENT_TYPE) {
-
+            EncodedDataEvent encodedDataEvent = (EncodedDataEvent) event.getEvent();
         }
     }
 }

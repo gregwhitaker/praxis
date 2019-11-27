@@ -15,18 +15,10 @@
  */
 package praxis.client;
 
-import com.lmax.disruptor.BusySpinWaitStrategy;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
-import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.event.EncodedDataEventHandler;
 import praxis.client.internal.event.EventBuffer;
-import praxis.client.internal.event.EventWrapper;
 import praxis.client.internal.event.RawDataEvent;
-import praxis.client.internal.event.RawDataEventHandler;
 
 /**
  * Praxis client.

@@ -66,9 +66,6 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
 
         praxis.event(eventData, Map.class);
 
-//        System.out.println(os);
-//        System.out.println("Booted: " + Instant.ofEpochSecond(os.getSystemBootTime()));
-//        System.out.println("Uptime: " + FormatUtil.formatElapsedSecs(os.getSystemUptime()));
-//        System.out.println("Running with" + (os.isElevated() ? "" : "out") + " elevated permissions.");
+        praxis.event("test", String.class);
     }
 }
