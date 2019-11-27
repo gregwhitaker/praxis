@@ -18,8 +18,27 @@ package praxis.client.internal.event;
 public class EncodedDataEvent implements Event {
     public static final int EVENT_TYPE = 2;
 
+    private long timestamp;
+    private byte[] data;
+
     @Override
     public int getType() {
         return EVENT_TYPE;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }

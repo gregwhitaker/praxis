@@ -24,10 +24,25 @@ public class RawDataEventHandler implements EventHandler<EventWrapper> {
     private static final Logger LOG = LoggerFactory.getLogger(RawDataEventHandler.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private final EventBuffer buffer;
+
+    public RawDataEventHandler(EventBuffer buffer) {
+        this.buffer = buffer;
+    }
+
     @Override
     public void onEvent(EventWrapper event, long sequence, boolean endOfBatch) throws Exception {
         if (event.getType() == RawDataEvent.EVENT_TYPE) {
+            RawDataEvent rawDataEvent = (RawDataEvent) event.getEvent();
 
+            EncodedDataEvent encodedDataEvent = new EncodedDataEvent();
+            encodedDataEvent.setTimestamp(rawDataEvent.getTimestamp());
+            encodedDataEvent.setData(MAPPER.writerFor(rawDataEvent.getDatatype()).writeValueAsBytes(rawDataEvent.getData()));
+
+            event.setType(encodedDataEvent.getType());
+            event.setEvent(encodedDataEvent);
+
+            buffer.publish(sequence);
         }
     }
 }

@@ -23,6 +23,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.event.EncodedDataEventHandler;
+import praxis.client.internal.event.EventBuffer;
 import praxis.client.internal.event.EventWrapper;
 import praxis.client.internal.event.RawDataEvent;
 import praxis.client.internal.event.RawDataEventHandler;
@@ -43,25 +44,11 @@ public final class Praxis {
     }
 
     private final PraxisConfiguration config;
-    private final RingBuffer<EventWrapper> ringBuffer;
+    private final EventBuffer eventBuffer;
 
     Praxis(final PraxisConfiguration config) {
         this.config = config;
-
-        // Configure ring buffer for outgoing events
-        Disruptor<EventWrapper> disruptor = new Disruptor<>(
-                EventWrapper::new,
-                1024,
-                DaemonThreadFactory.INSTANCE,
-                ProducerType.SINGLE,
-                new BusySpinWaitStrategy());
-
-        // Assign event handlers to the ring buffer
-        disruptor.handleEventsWith(new RawDataEventHandler(),
-                new EncodedDataEventHandler(config));
-
-        // Start ring buffer for outgoing events
-        this.ringBuffer = disruptor.start();
+        this.eventBuffer = new EventBuffer(config);
     }
 
     /**
@@ -71,18 +58,6 @@ public final class Praxis {
      * @param <T>
      */
     public <T> void event(T data, Class<T> datatype) {
-        // Event data to process
-        RawDataEvent event = new RawDataEvent(data, datatype);
-
-        // Getting the next ring buffer memory location
-        long seq = this.ringBuffer.next();
-
-        // Wrapping event so it can be put into the ring buffer
-        EventWrapper eventWrapper = this.ringBuffer.get(seq);
-        eventWrapper.setType(event.getType());
-        eventWrapper.setEvent(event);
-
-        // Publishing event to the ring buffer
-        this.ringBuffer.publish(seq);
+        eventBuffer.publish(new RawDataEvent(data, datatype));
     }
 }

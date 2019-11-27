@@ -26,7 +26,7 @@ import praxis.client.PraxisConfiguration;
 public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
     private static final Logger LOG = LoggerFactory.getLogger(EncodedDataEventHandler.class);
 
-    public EncodedDataEventHandler(PraxisConfiguration config) {
+    public EncodedDataEventHandler(PraxisConfiguration config, EventBuffer buffer) {
 
     }
 
