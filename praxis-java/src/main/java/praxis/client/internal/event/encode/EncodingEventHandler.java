@@ -22,6 +22,6 @@ public class EncodingEventHandler implements EventHandler<PraxisEvent> {
 
     @Override
     public void onEvent(PraxisEvent event, long sequence, boolean endOfBatch) throws Exception {
-
+        
     }
 }

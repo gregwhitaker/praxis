@@ -15,6 +15,13 @@
  */
 package praxis.client.internal.event.encode;
 
-public class JsonEventEncoder {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+public class JsonEventEncoder {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    public static byte[] encode(Object obj, Class<?> clazz) throws JsonProcessingException {
+        return MAPPER.writerFor(clazz).writeValueAsBytes(obj);
+    }
 }
