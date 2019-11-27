@@ -18,6 +18,9 @@ package praxis.client;
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 
+/**
+ * Exception thrown when the Praxis configuration is invalid.
+ */
 public class PraxisConfigurationException extends RuntimeException {
 
     private final Set<ConstraintViolation<PraxisConfiguration>> violations;
