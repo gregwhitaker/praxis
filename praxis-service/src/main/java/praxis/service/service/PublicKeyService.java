@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 /**
  * Service that manages the public encryption keys used for incoming events.
