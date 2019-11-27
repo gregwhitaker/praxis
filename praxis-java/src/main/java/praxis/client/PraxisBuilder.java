@@ -15,6 +15,12 @@
  */
 package praxis.client;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
+
 /**
  * Praxis client builder.
  */
@@ -44,7 +50,21 @@ public class PraxisBuilder {
         return this;
     }
 
+    /**
+     * Creates an instance of the {@link Praxis} client.
+     *
+     * @return a fully configured instance of the Praxis client
+     */
     public Praxis build() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<PraxisConfiguration>> violations = validator.validate(config);
+
+        if (!violations.isEmpty()) {
+            throw new PraxisConfigurationException(violations);
+        }
+
         return new Praxis(config);
     }
 }

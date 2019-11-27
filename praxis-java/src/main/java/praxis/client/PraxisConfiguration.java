@@ -24,7 +24,7 @@ import javax.validation.constraints.NotBlank;
  * Praxis client configuration.
  */
 @Valid
-final class PraxisConfiguration {
+public final class PraxisConfiguration {
 
     @NotBlank(message = "Hostname is required")
     private String hostname;

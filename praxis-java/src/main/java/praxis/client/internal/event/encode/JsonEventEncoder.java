@@ -13,24 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client;
+package praxis.client.internal.event.encode;
 
-import com.lmax.disruptor.EventHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class JsonEventEncoder {
 
-/**
- * 
- */
-class PraxisEventHandler implements EventHandler<PraxisEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(PraxisEventHandler.class);
-
-    public PraxisEventHandler(PraxisConfiguration config) {
-
-    }
-
-    @Override
-    public void onEvent(PraxisEvent event, long sequence, boolean endOfBatch) throws Exception {
-
-    }
 }

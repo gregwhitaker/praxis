@@ -15,36 +15,19 @@
  */
 package praxis.client;
 
-import com.lmax.disruptor.EventFactory;
+import javax.validation.ConstraintViolation;
+import java.util.Set;
 
-class PraxisEvent {
-    public static final EventFactory<PraxisEvent> EVENT_FACTORY = PraxisEvent::new;
+public class PraxisConfigurationException extends RuntimeException {
 
-    private int type;
-    private long timestamp;
-    private byte[] data;
+    private final Set<ConstraintViolation<PraxisConfiguration>> violations;
 
-    public int getType() {
-        return type;
+    public PraxisConfigurationException(Set<ConstraintViolation<PraxisConfiguration>> violations) {
+        super("Invalid Praxis Configuration");
+        this.violations = violations;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
+    public Set<ConstraintViolation<PraxisConfiguration>> getViolations() {
+        return violations;
     }
 }

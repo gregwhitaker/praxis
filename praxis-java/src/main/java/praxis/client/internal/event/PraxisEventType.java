@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client;
+package praxis.client.internal.event;
 
 public enum PraxisEventType {
     DATA(1);
