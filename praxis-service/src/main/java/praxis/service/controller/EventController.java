@@ -37,11 +37,15 @@ import java.util.function.Function;
 public class EventController {
     private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
+    private final PublicKeyService publicKeyService;
 
     @Autowired
-    private PublicKeyService publicKeyService;
+    public EventController(EventService eventService,
+                           PublicKeyService publicKeyService) {
+        this.eventService = eventService;
+        this.publicKeyService = publicKeyService;
+    }
 
     /**
      * Get the public encryption key for event ingestion.

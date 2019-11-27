@@ -23,24 +23,32 @@ import praxis.service.core.event.EventProcessor;
 import praxis.service.data.event.EventLedgerDao;
 import reactor.core.publisher.Mono;
 
+/**
+ * Service that handles incoming events.
+ */
 @Component
 public class EventService {
     private static final Logger LOG = LoggerFactory.getLogger(EventService.class);
 
-    @Autowired
-    private EventLedgerDao eventLedger;
+    private final EventLedgerDao eventLedger;
+    private final EventProcessor eventProcessor;
 
     @Autowired
-    private EventProcessor eventProcessor;
+    public EventService(EventLedgerDao eventLedger,
+                        EventProcessor eventProcessor) {
+        this.eventLedger = eventLedger;
+        this.eventProcessor = eventProcessor;
+    }
 
     /**
+     * Consumes and stores the event in the event ledger for future processing.
      *
-     * @param data
+     * @param data event data
      * @return
      */
     public Mono<Void> consumeEvent(byte[] data) {
         return eventLedger.save(data)
-                .doOnSuccess(eventId -> eventProcessor.schedule(eventId))
+                .doOnSuccess(eventProcessor::schedule)
                 .then();
     }
 }
