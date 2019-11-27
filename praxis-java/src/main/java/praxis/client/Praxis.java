@@ -22,7 +22,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.event.publish.PublishEventHandler;
+import praxis.client.internal.event.EncodedDataEventHandler;
 
 /**
  * Praxis client.
@@ -53,7 +53,7 @@ public final class Praxis {
                 ProducerType.SINGLE,
                 new BusySpinWaitStrategy());
 
-        disruptor.handleEventsWith(new PublishEventHandler(config));
+        disruptor.handleEventsWith(new EncodedDataEventHandler(config));
 
         // Start ring buffer for outgoing events
         this.publishBuffer = disruptor.start();

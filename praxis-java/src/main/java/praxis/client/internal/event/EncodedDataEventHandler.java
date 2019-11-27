@@ -13,20 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event.encode;
+package praxis.client.internal.event;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmax.disruptor.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.event.EventWrapper;
+import praxis.client.PraxisConfiguration;
 
-public class EncodingEventHandler implements EventHandler<EventWrapper> {
-    private static final Logger LOG = LoggerFactory.getLogger(EncodingEventHandler.class);
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+/**
+ * 
+ */
+public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
+    private static final Logger LOG = LoggerFactory.getLogger(EncodedDataEventHandler.class);
+
+    public EncodedDataEventHandler(PraxisConfiguration config) {
+
+    }
 
     @Override
     public void onEvent(EventWrapper event, long sequence, boolean endOfBatch) throws Exception {
+        if (event.getType() == EncodedDataEvent.EVENT_TYPE) {
 
+        }
     }
 }
