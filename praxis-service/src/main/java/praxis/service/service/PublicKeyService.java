@@ -16,17 +16,26 @@
 package praxis.service.service;
 
 import com.nimbusds.jose.jwk.JWKSet;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import praxis.service.config.settings.EncryptionSettings;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 public class PublicKeyService {
     private static final Logger LOG = LoggerFactory.getLogger(PublicKeyService.class);
 
-    public PublicKeyService() {
-        init();
+    @Autowired
+    public PublicKeyService(EncryptionSettings settings) {
+        init(settings);
     }
 
     public Mono<JWKSet> getKeys() {
@@ -35,7 +44,27 @@ public class PublicKeyService {
         });
     }
 
-    private void init() {
+    /**
+     * Initializes this service on startup.
+     *
+     * @param settings
+     */
+    private void init(final EncryptionSettings settings) {
+        if (StringUtils.isEmpty(settings.getKeystoreDirectory())) {
+            // TODO: fix this error handling
+            throw new RuntimeException("");
+        }
+
+        // Create the keystore directory if it does not exist
+        if (!Files.exists(Paths.get(settings.getKeystoreDirectory()))) {
+            try {
+                Files.createDirectories(Paths.get(settings.getKeystoreDirectory()));
+            } catch (IOException e) {
+                // TODO: fix this error handling
+                throw new RuntimeException("", e);
+            }
+        }
+
 
     }
 }
