@@ -15,6 +15,8 @@
  */
 package praxis.service.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import java.util.function.Function;
  */
 @RestController
 public class EventController {
+    private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     @Autowired
     private EventService eventService;
@@ -48,7 +51,10 @@ public class EventController {
     @GetMapping(value = "/events/public_key",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity> getKey() {
-        return null;
+        return publicKeyService.getKeys()
+                .map(jwkSet -> {
+                    return ResponseEntity.ok().build();
+                });
     }
 
     /**

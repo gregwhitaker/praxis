@@ -15,9 +15,11 @@
  */
 package praxis.service.service;
 
+import com.nimbusds.jose.jwk.JWKSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 public class PublicKeyService {
@@ -25,6 +27,12 @@ public class PublicKeyService {
 
     public PublicKeyService() {
         init();
+    }
+
+    public Mono<JWKSet> getKeys() {
+        return Mono.fromSupplier(() -> {
+           return null;
+        });
     }
 
     private void init() {
