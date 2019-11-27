@@ -26,9 +26,12 @@ import org.springframework.stereotype.Component;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
+import oshi.util.FormatUtil;
 import praxis.client.Praxis;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ReportingListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -57,7 +60,11 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
 
-        praxis.send(os.toString());
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("os", os.toString());
+        eventData.put("uptime", FormatUtil.formatElapsedSecs(os.getSystemUptime()));
+
+        praxis.event(eventData, Map.class);
 
 //        System.out.println(os);
 //        System.out.println("Booted: " + Instant.ofEpochSecond(os.getSystemBootTime()));

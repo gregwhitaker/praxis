@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.event.EncodedDataEventHandler;
 import praxis.client.internal.event.EventWrapper;
+import praxis.client.internal.event.RawDataEvent;
 import praxis.client.internal.event.RawDataEventHandler;
 
 /**
@@ -61,5 +62,27 @@ public final class Praxis {
 
         // Start ring buffer for outgoing events
         this.ringBuffer = disruptor.start();
+    }
+
+    /**
+     *
+     * @param data
+     * @param datatype
+     * @param <T>
+     */
+    public <T> void event(T data, Class<T> datatype) {
+        // Event data to process
+        RawDataEvent event = new RawDataEvent(data, datatype);
+
+        // Getting the next ring buffer memory location
+        long seq = this.ringBuffer.next();
+
+        // Wrapping event so it can be put into the ring buffer
+        EventWrapper eventWrapper = this.ringBuffer.get(seq);
+        eventWrapper.setType(event.getType());
+        eventWrapper.setEvent(event);
+
+        // Publishing event to the ring buffer
+        this.ringBuffer.publish(seq);
     }
 }

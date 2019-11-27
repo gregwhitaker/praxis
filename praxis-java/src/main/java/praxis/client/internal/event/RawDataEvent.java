@@ -18,8 +18,46 @@ package praxis.client.internal.event;
 public class RawDataEvent implements Event {
     public static final int EVENT_TYPE = 1;
 
+    private long timestamp;
+    private Object data;
+    private Class<?> datatype;
+
+    public RawDataEvent() {
+        // Noop
+    }
+
+    public RawDataEvent(final Object data, final Class<?> datatype) {
+        this.timestamp = System.currentTimeMillis();
+        this.data = data;
+        this.datatype = datatype;
+    }
+
     @Override
     public int getType() {
         return EVENT_TYPE;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public Class<?> getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(Class<?> datatype) {
+        this.datatype = datatype;
     }
 }
