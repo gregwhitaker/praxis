@@ -15,10 +15,11 @@
  */
 package praxis.client.internal.event;
 
-import com.lmax.disruptor.EventFactory;
-
+/**
+ * Wrapper class that holds events of different types and allows them
+ * to be used within the same lmax disruptor.
+ */
 public class EventWrapper {
-    public final static EventFactory EVENT_FACTORY = EventWrapper::new;
 
     private int type;
     private Event event;
