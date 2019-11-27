@@ -15,29 +15,35 @@
  */
 package praxis.service.config.settings;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "praxis.encryption")
-public class EncryptionSettings {
+@ConfigurationProperties(prefix = "praxis")
+public class PraxisSettings {
+    public static final String DEFAULT_HOME_DIRECTORY = "/tmp/praxis-service";
 
-    private String keystoreDirectory;
-    private String keystoreName;
+    private String homeDirectory;
+    private boolean autogenerateKeys;
 
-    public String getKeystoreName() {
-        return keystoreName;
+    public String getHomeDirectory() {
+        if (StringUtils.isEmpty(homeDirectory)) {
+            return DEFAULT_HOME_DIRECTORY;
+        }
+
+        return homeDirectory;
     }
 
-    public void setKeystoreName(String keystoreName) {
-        this.keystoreName = keystoreName;
+    public void setHomeDirectory(String homeDirectory) {
+        this.homeDirectory = homeDirectory;
     }
 
-    public String getKeystoreDirectory() {
-        return keystoreDirectory;
+    public boolean isAutogenerateKeys() {
+        return autogenerateKeys;
     }
 
-    public void setKeystoreDirectory(String keystoreDirectory) {
-        this.keystoreDirectory = keystoreDirectory;
+    public void setAutogenerateKeys(boolean autogenerateKeys) {
+        this.autogenerateKeys = autogenerateKeys;
     }
 }
