@@ -34,8 +34,7 @@ public class CryptoListener implements ApplicationListener<ContextRefreshedEvent
         if (isNewEncryptionKeysNeeded(homeDir)) {
             // Don't automatically generate encryption keys unless explicitly configured
             if (!settings.isAutogenerateKeys()) {
-                // TODO: Fix this error handling
-                throw new RuntimeException("");
+                throw new RuntimeException("Cannot auto-generate new encryption keys because property 'praxis.autogenerate-keys` is `false`");
             }
 
             // Delete the Praxis public key if it exists
@@ -60,6 +59,11 @@ public class CryptoListener implements ApplicationListener<ContextRefreshedEvent
         }
     }
 
+    /**
+     * Get the Praxis home directory.
+     *
+     * @return the home directory
+     */
     private Path getHomeDirectory() {
         // Creating the Praxis home directory if it does not exist
         if (Files.notExists(Paths.get(settings.getHomeDirectory()))) {
@@ -74,13 +78,19 @@ public class CryptoListener implements ApplicationListener<ContextRefreshedEvent
         return Paths.get(settings.getHomeDirectory());
     }
 
+    /**
+     *
+     * @param homeDir
+     * @return
+     */
     private boolean isNewEncryptionKeysNeeded(Path homeDir) {
         return true;
     }
 
     /**
+     * Generates a new RSA key pair.
      *
-     * @return
+     * @return newly generated key pair
      */
     private KeyPair generateKeyPair() {
         try {
