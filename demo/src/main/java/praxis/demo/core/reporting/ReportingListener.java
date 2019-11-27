@@ -26,11 +26,9 @@ import org.springframework.stereotype.Component;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
-import oshi.util.FormatUtil;
 import praxis.client.Praxis;
 
 import java.io.IOException;
-import java.time.Instant;
 
 @Component
 public class ReportingListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -59,9 +57,11 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
 
-        System.out.println(os);
-        System.out.println("Booted: " + Instant.ofEpochSecond(os.getSystemBootTime()));
-        System.out.println("Uptime: " + FormatUtil.formatElapsedSecs(os.getSystemUptime()));
-        System.out.println("Running with" + (os.isElevated() ? "" : "out") + " elevated permissions.");
+        praxis.send(os.toString());
+
+//        System.out.println(os);
+//        System.out.println("Booted: " + Instant.ofEpochSecond(os.getSystemBootTime()));
+//        System.out.println("Uptime: " + FormatUtil.formatElapsedSecs(os.getSystemUptime()));
+//        System.out.println("Running with" + (os.isElevated() ? "" : "out") + " elevated permissions.");
     }
 }

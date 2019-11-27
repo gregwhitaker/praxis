@@ -13,10 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.event;
+package praxis.client;
 
 import com.lmax.disruptor.EventFactory;
 
-public class PraxisEvent {
+class PraxisEvent {
     public static final EventFactory<PraxisEvent> EVENT_FACTORY = PraxisEvent::new;
+
+    private int type;
+    private long timestamp;
+    private byte[] data;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
 }

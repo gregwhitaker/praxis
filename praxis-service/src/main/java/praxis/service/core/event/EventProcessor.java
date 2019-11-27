@@ -76,8 +76,6 @@ public class EventProcessor {
 
         private long eventId;
 
-        ProcessEvent() { }
-
         long getEventId() {
             return eventId;
         }
