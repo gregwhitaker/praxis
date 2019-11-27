@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Service that manages the public encryption keys used for incoming events.
+ */
 @Component
 public class PublicKeyService {
     private static final Logger LOG = LoggerFactory.getLogger(PublicKeyService.class);
@@ -37,6 +40,11 @@ public class PublicKeyService {
         init(settings);
     }
 
+    /**
+     * Gets the public encryption key information as a JWK set.
+     * 
+     * @return
+     */
     public Mono<JWKSet> getKeys() {
         return Mono.fromSupplier(() -> {
            return null;
