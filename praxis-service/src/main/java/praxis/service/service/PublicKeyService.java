@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
@@ -56,7 +55,7 @@ public class PublicKeyService {
         }
 
         // Create the keystore directory if it does not exist
-        if (!Files.exists(Paths.get(settings.getKeystoreDirectory()))) {
+        if (Files.notExists(Paths.get(settings.getKeystoreDirectory()))) {
             try {
                 Files.createDirectories(Paths.get(settings.getKeystoreDirectory()));
             } catch (IOException e) {
@@ -65,6 +64,9 @@ public class PublicKeyService {
             }
         }
 
+        // Create the keystore file if it does not exist
+        if (Files.notExists(Paths.get(settings.getKeystoreDirectory(), settings.getKeystoreName()))) {
 
+        }
     }
 }
