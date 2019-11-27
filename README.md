@@ -1,5 +1,5 @@
 # praxis
-Application usage monitoring components and services.
+Generic event ingestion service.
 
 ## License
 Copyright 2019 Greg Whitaker
