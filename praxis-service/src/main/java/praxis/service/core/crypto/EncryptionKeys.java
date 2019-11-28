@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import praxis.service.config.settings.PraxisSettings;
+import sun.security.rsa.RSAKeyPairGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,6 +21,8 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -40,8 +43,8 @@ public final class EncryptionKeys {
     private final Path publicKeyPath;
     private final Path privateKeyPath;
     private JWKSet jwkSet;
-    private PublicKey publicKey;
-    private PrivateKey privateKey;
+    private RSAPublicKey publicKey;
+    private RSAPrivateKey privateKey;
 
     @Autowired
     public EncryptionKeys(@Qualifier("homeDir") Path homeDir, PraxisSettings settings) throws Exception {
@@ -103,15 +106,14 @@ public final class EncryptionKeys {
 
         // Load public key
         X509EncodedKeySpec pubKs = new X509EncodedKeySpec(loadPem(publicKeyPath));
-        this.publicKey = kf.generatePublic(pubKs);
+        this.publicKey = (RSAPublicKey) kf.generatePublic(pubKs);
 
         // Load private key
         PKCS8EncodedKeySpec pvtKs = new PKCS8EncodedKeySpec(loadPem(privateKeyPath));
-        this.privateKey = kf.generatePrivate(pvtKs);
+        this.privateKey = (RSAPrivateKey) kf.generatePrivate(pvtKs);
 
         // Load JWKSet
-        String certString = new String(Files.readAllBytes(publicKeyPath));
-        JWK jwk = RSAKey.parseFromPEMEncodedObjects(certString);
+        RSAKey jwk = new RSAKey.Builder(this.publicKey).build();
         this.jwkSet = new JWKSet(jwk);
     }
 
@@ -155,7 +157,7 @@ public final class EncryptionKeys {
         kpg.initialize(2048);
 
         KeyPair kp = kpg.generateKeyPair();
-        this.publicKey = kp.getPublic();
-        this.privateKey = kp.getPrivate();
+        this.publicKey = (RSAPublicKey) kp.getPublic();
+        this.privateKey = (RSAPrivateKey) kp.getPrivate();
     }
 }

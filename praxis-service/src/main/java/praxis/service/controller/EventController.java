@@ -57,7 +57,7 @@ public class EventController {
     public Mono<ResponseEntity> getKey() {
         return publicKeyService.getKeys()
                 .map(jwkSet -> {
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok(jwkSet.toPublicJWKSet().toJSONObject());
                 });
     }
 
