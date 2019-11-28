@@ -15,13 +15,28 @@
  */
 package praxis.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Event sent by Praxis to capture the usage of an application.
  */
+@JsonPropertyOrder({
+        "id",
+        "correlationId",
+        "type",
+        "timestamp",
+        "attributes"
+})
 public class PingEvent extends EventAttributes implements Event {
 
+    @JsonProperty("i")
     private String id;
+
+    @JsonProperty("ci")
     private String correlationId;
+
+    @JsonProperty("ts")
     private long timestamp;
 
     @Override
@@ -42,6 +57,7 @@ public class PingEvent extends EventAttributes implements Event {
         this.correlationId = correlationId;
     }
 
+    @JsonProperty("t")
     @Override
     public long getType() {
         return EventType.PING.getValue();
