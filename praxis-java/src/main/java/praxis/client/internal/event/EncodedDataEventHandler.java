@@ -16,6 +16,8 @@
 package praxis.client.internal.event;
 
 import com.lmax.disruptor.EventHandler;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,6 +25,9 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.PraxisConfiguration;
+
+import javax.crypto.Cipher;
+import java.security.PublicKey;
 
 /**
  * Handles {@link EncodedDataEvent} messages.
@@ -33,11 +38,13 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
     private final EventBuffer buffer;
     private final OkHttpClient httpClient;
     private final String eventsUrl;
+    private final Cipher cipher;
 
     public EncodedDataEventHandler(PraxisConfiguration config, final EventBuffer buffer) {
         this.buffer = buffer;
         this.httpClient = new OkHttpClient();
-        this.eventsUrl = getEventsUrl(config);
+        this.eventsUrl = getBasePraxisUrl(config) + "/events";
+        this.cipher = getCipher(config);
     }
 
     @Override
@@ -60,7 +67,7 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
         }
     }
 
-    private String getEventsUrl(PraxisConfiguration config) {
+    private String getBasePraxisUrl(PraxisConfiguration config) {
         StringBuilder urlBuilder = new StringBuilder();
 
         if (config.isSsl()) {
@@ -79,8 +86,30 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
             }
         }
 
-        urlBuilder.append("/events");
-
         return urlBuilder.toString();
+    }
+
+    public Cipher getCipher(PraxisConfiguration config) {
+        Request request = new Request.Builder()
+                .url(getBasePraxisUrl(config) + "/events/public_key")
+                .get()
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                JWKSet jwkSet = JWKSet.parse(response.body().string());
+                PublicKey publicKey = RSAKey.parse(jwkSet.getKeys().get(0).toJSONString()).toPublicKey();
+
+                Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+                return cipher;
+            } else {
+                // TODO: fix this error handling
+                throw new RuntimeException("");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

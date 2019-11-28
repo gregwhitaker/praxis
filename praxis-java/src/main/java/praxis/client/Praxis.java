@@ -15,6 +15,7 @@
  */
 package praxis.client;
 
+import com.nimbusds.jose.jwk.RSAKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.event.EventBuffer;
