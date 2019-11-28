@@ -15,13 +15,37 @@
  */
 package praxis.model;
 
+/**
+ * Interface that all Praxis events must implement.
+ */
 public interface Event {
 
+    /**
+     * Gets this event's identifier.
+     *
+     * @return event identifier
+     */
     String getId();
 
+    /**
+     * Gets the event identifier of the correlated event.
+     *
+     * @return event identifier of correlated event or <code>null</code> if there is
+     * no correlated event
+     */
     String getCorrelationId();
 
+    /**
+     * Gets the type of the event.
+     *
+     * @return event type id
+     */
     long getType();
 
+    /**
+     * Gets the timestamp of when the event occurred.
+     *
+     * @return event timestamp
+     */
     long getTimestamp();
 }
