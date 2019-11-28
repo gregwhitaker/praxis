@@ -26,8 +26,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLType;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 @Component
 public class EventLedgerDao {
@@ -42,27 +44,24 @@ public class EventLedgerDao {
      * @param data binary data to save
      * @return
      */
-    public Mono<Long> save(byte[] data) {
-        return Mono.defer(() -> {
-            try (Connection conn = dataSource.getConnection()) {
-                final String sql = "INSERT INTO event_ledger (evt_ts, evt_data) VALUES (?, ?)";
+    public Mono<String> save(byte[] data) {
+        return Mono.fromSupplier(() -> {
+           try (Connection conn = dataSource.getConnection()) {
+               final String sql = "INSERT INTO event_ledger (led_id, led_ts, evt_data) VALUES (?, ?, ?)";
+               final UUID newId = UUID.randomUUID();
 
-                try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                    ps.setTimestamp(1, Timestamp.from(Instant.now()));
-                    ps.setBytes(2, data);
-                    ps.executeUpdate();
+               try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                   ps.setObject(1, newId);
+                   ps.setTimestamp(2, Timestamp.from(Instant.now()));
+                   ps.setBytes(3, data);
 
-                    try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            return Mono.just(rs.getLong(1));
-                        }
-                    }
+                   ps.executeUpdate();
 
-                    throw new RuntimeException("Error occurred saving data to consumeEvent ledger");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Error occurred saving data to consumeEvent ledger", e);
-            }
+                   return newId.toString();
+               }
+           } catch (SQLException e) {
+               throw new RuntimeException("Error occurred saving event to the event ledger", e);
+           }
         });
     }
 }

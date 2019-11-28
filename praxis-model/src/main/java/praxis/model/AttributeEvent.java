@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Attribute container for events that support the attachment of user-defined attributes.
  */
-public abstract class EventAttributes {
+public abstract class AttributeEvent {
 
     protected final Map<String, Object> attrs = new HashMap<>();
 

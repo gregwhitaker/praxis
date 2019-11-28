@@ -14,8 +14,21 @@
 -- limitations under the License.
 --
 
-CREATE TABLE event_ledger (
-    evt_id      BIGSERIAL   PRIMARY KEY,
-    evt_ts      TIMESTAMP   NOT NULL,
+CREATE UNLOGGED TABLE event_ledger (
+    led_id      UUID        PRIMARY KEY,
+    led_ts      TIMESTAMP   NOT NULL,
+    pcd_ts      TIMESTAMP,
     evt_data    BYTEA       NOT NULL
+)
+-- PARTITION BY RANGE (led_ts)
+WITH (autovacuum_enabled=false);
+
+CREATE TABLE events (
+    evt_id          UUID        PRIMARY KEY,
+    evt_corr_id     UUID,
+    evt_type        BIGINT      NOT NULL,
+    evt_ts          TIMESTAMP   NOT NULL,
+    evt_pcd_ts      TIMESTAMP   NOT NULL,
+    evt_attrs       JSONB
 );
+CREATE INDEX events_corr_id ON events(evt_corr_id);

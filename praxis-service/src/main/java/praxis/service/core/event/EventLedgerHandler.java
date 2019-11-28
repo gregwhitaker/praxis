@@ -25,17 +25,17 @@ import praxis.service.core.logging.LogMessage;
 import javax.sql.DataSource;
 
 @Component
-public class EventProcessorHandler implements EventHandler<EventProcessor.ProcessEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(EventProcessorHandler.class);
+public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLedgerEvent> {
+    private static final Logger LOG = LoggerFactory.getLogger(EventLedgerHandler.class);
 
     @Autowired
     private DataSource dataSource;
 
     @Override
-    public void onEvent(EventProcessor.ProcessEvent event, long sequence, boolean endOfBatch) throws Exception {
+    public void onEvent(EventProcessor.ProcessLedgerEvent event, long sequence, boolean endOfBatch) throws Exception {
         LOG.debug(LogMessage.builder()
                 .withMessage("Processing Event")
-                .withData("eventId", event.getEventId())
+                .withData("eventId", event.getLedgerId())
                 .build());
     }
 }

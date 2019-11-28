@@ -31,12 +31,12 @@ import praxis.service.core.logging.LogMessage;
 public class EventProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
 
-    private final RingBuffer<ProcessEvent> eventBuffer;
+    private final RingBuffer<ProcessLedgerEvent> eventBuffer;
 
     @Autowired
-    public EventProcessor(EventProcessorHandler handler) {
-        Disruptor<ProcessEvent> disruptor = new Disruptor<>(
-                ProcessEvent.EVENT_FACTORY,
+    public EventProcessor(EventLedgerHandler handler) {
+        Disruptor<ProcessLedgerEvent> disruptor = new Disruptor<>(
+                ProcessLedgerEvent.EVENT_FACTORY,
                 1024,
                 DaemonThreadFactory.INSTANCE,
                 ProducerType.SINGLE,
@@ -48,22 +48,22 @@ public class EventProcessor {
     }
 
     /**
-     * Adds the event id to the ring buffer for later processing.
+     * Adds the ledger id to the ring buffer for later processing.
      *
-     * @param eventId
+     * @param ledgerId ledger identifier
      */
-    public void schedule(long eventId) {
+    public void schedule(String ledgerId) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(LogMessage.builder()
-                    .withMessage("Event scheduled for processing")
-                    .withData("eventId", eventId)
+                    .withMessage("Event in ledger scheduled for processing")
+                    .withData("ledgerId", ledgerId)
                     .build());
         }
 
         long seq = eventBuffer.next();
 
-        ProcessEvent eventToProcess = eventBuffer.get(seq);
-        eventToProcess.setEventId(eventId);
+        ProcessLedgerEvent eventToProcess = eventBuffer.get(seq);
+        eventToProcess.setLedgerId(ledgerId);
 
         eventBuffer.publish(seq);
     }
@@ -71,17 +71,17 @@ public class EventProcessor {
     /**
      * Event wrapper that holds event ids to process in the LMAX buffer.
      */
-    static class ProcessEvent {
-        static final EventFactory<ProcessEvent> EVENT_FACTORY = ProcessEvent::new;
+    static class ProcessLedgerEvent {
+        static final EventFactory<ProcessLedgerEvent> EVENT_FACTORY = ProcessLedgerEvent::new;
 
-        private long eventId;
+        private String ledgerId;
 
-        long getEventId() {
-            return eventId;
+        String getLedgerId() {
+            return ledgerId;
         }
 
-        void setEventId(long eventId) {
-            this.eventId = eventId;
+        void setLedgerId(String ledgerId) {
+            this.ledgerId = ledgerId;
         }
     }
 }

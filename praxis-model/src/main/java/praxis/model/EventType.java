@@ -15,19 +15,36 @@
  */
 package praxis.model;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Enumeration of Praxis reserved event types.
  */
 public enum EventType {
-    PING(1);
+    STARTUP(1),
+    HEARTBEAT(2),
+    SHUTDOWN(3),
+    USER_DEFINED(4);
 
-    private final long value;
+    private static final Map<Integer, EventType> LOOKUP = new HashMap<>();
 
-    EventType(final long value) {
+    static {
+        EnumSet.allOf(EventType.class).forEach(e -> LOOKUP.put(e.getValue(), e));
+    }
+
+    private final int value;
+
+    EventType(final int value) {
         this.value = value;
     }
 
-    public long getValue() {
+    public int getValue() {
         return value;
+    }
+
+    public static EventType get(int value) {
+        return LOOKUP.get(value);
     }
 }
