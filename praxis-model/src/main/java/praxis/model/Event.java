@@ -15,35 +15,13 @@
  */
 package praxis.model;
 
-public abstract class Event {
+public interface Event {
 
-    private String id;
-    private String corrId;
-    private long time;
+    String getId();
 
-    public String getId() {
-        return id;
-    }
+    String getCorrelationId();
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    long getType();
 
-    public String getCorrId() {
-        return corrId;
-    }
-
-    public void setCorrId(String corrId) {
-        this.corrId = corrId;
-    }
-
-    public abstract long getType();
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
+    long getTimestamp();
 }

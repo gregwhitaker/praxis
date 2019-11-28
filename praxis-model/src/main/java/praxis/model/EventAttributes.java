@@ -18,7 +18,7 @@ package praxis.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AttributeEvent extends Event {
+public abstract class EventAttributes {
 
     protected final Map<String, Object> attrs = new HashMap<>();
 

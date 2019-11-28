@@ -15,10 +15,41 @@
  */
 package praxis.model;
 
-public class PingEvent extends AttributeEvent {
+public class PingEvent extends EventAttributes implements Event {
+
+    private String id;
+    private String correlationId;
+    private long timestamp;
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
 
     @Override
     public long getType() {
         return EventType.PING.getValue();
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
