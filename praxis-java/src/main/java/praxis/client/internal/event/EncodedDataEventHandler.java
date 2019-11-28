@@ -54,7 +54,7 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
 
             Request request = new Request.Builder()
                     .url(eventsUrl)
-                    .post(RequestBody.create(encodedDataEvent.getData()))
+                    .post(RequestBody.create(cipher.doFinal(encodedDataEvent.getData())))
                     .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
@@ -89,7 +89,7 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
         return urlBuilder.toString();
     }
 
-    public Cipher getCipher(PraxisConfiguration config) {
+    private Cipher getCipher(PraxisConfiguration config) {
         Request request = new Request.Builder()
                 .url(getBasePraxisUrl(config) + "/events/public_key")
                 .get()
