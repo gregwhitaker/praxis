@@ -18,9 +18,20 @@ package praxis.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Attribute container for events that support the attachment of user-defined attributes.
+ */
 public abstract class EventAttributes {
 
     protected final Map<String, Object> attrs = new HashMap<>();
+
+    public long getAttributeCount() {
+        return attrs.size();
+    }
+
+    public void clearAttributes() {
+        this.attrs.clear();
+    }
 
     public void addAttribute(String key, String value) {
         this.attrs.put(key, value);
