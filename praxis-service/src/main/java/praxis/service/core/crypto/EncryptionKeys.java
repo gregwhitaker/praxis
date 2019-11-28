@@ -41,11 +41,27 @@ public final class EncryptionKeys {
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
-    public EncryptionKeys() {
+    public EncryptionKeys() throws Exception {
         this.publicKeyFile = homeDir.resolve(PUBLIC_KEY_NAME);
         this.privateKeyFile = homeDir.resolve(PRIVATE_KEY_NAME);
 
         LOG.debug("Initializing {}", this.getClass().getSimpleName());
+
+        if (Files.notExists(publicKeyFile) || Files.notExists(privateKeyFile)) {
+            // Don't automatically generate encryption keys unless explicitly configured
+            if (!settings.isAutogenerateKeys()) {
+                throw new RuntimeException("Cannot auto-generate new encryption keys because property 'praxis.autogenerate-keys` is `false`");
+            }
+
+            // Generate new keys
+            generate();
+
+            // Store the new keys on the file system
+            store();
+        }
+
+        // Load the keys from the file system
+        load();
     }
 
     /**
