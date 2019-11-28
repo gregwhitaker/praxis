@@ -56,9 +56,7 @@ public class EventController {
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity> getKey() {
         return publicKeyService.getKeys()
-                .map(jwkSet -> {
-                    return ResponseEntity.ok(jwkSet.toPublicJWKSet().toJSONObject());
-                });
+                .map(jwkSet -> ResponseEntity.ok(jwkSet.toPublicJWKSet().toJSONObject()));
     }
 
     /**
