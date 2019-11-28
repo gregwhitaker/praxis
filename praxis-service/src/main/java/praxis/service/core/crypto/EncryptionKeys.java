@@ -1,6 +1,8 @@
 package praxis.service.core.crypto;
 
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 /**
  * Generates, loads, and stores the RSA key pair to use when encrypting and decrypting events.
@@ -29,14 +32,14 @@ import java.util.Base64;
 public final class EncryptionKeys {
     private static final Logger LOG = LoggerFactory.getLogger(EncryptionKeys.class);
 
-    private static final String PUBLIC_KEY_NAME = "praxis.pub";
+    private static final String PUBLIC_KEY_NAME = "praxis.pem";
     private static final String PRIVATE_KEY_NAME = "praxis.key";
 
     private final PraxisSettings settings;
     private final Path homeDir;
     private final Path publicKeyPath;
     private final Path privateKeyPath;
-    private JWKSet jwk;
+    private JWKSet jwkSet;
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
@@ -47,7 +50,7 @@ public final class EncryptionKeys {
         this.publicKeyPath = homeDir.resolve(PUBLIC_KEY_NAME);
         this.privateKeyPath = homeDir.resolve(PRIVATE_KEY_NAME);
 
-        LOG.debug("Initializing {}", this.getClass().getSimpleName());
+        LOG.info("Initializing Encryption Keys...");
 
         if (Files.notExists(publicKeyPath) || Files.notExists(privateKeyPath)) {
             // Don't automatically generate encryption keys unless explicitly configured
@@ -64,6 +67,8 @@ public final class EncryptionKeys {
 
         // Load the keys from the file system
         load();
+
+        LOG.info("Encryption Key Initialization Complete");
     }
 
     /**
@@ -72,7 +77,7 @@ public final class EncryptionKeys {
      * @return JWK
      */
     public JWKSet getPublicJWK() {
-        return jwk;
+        return jwkSet;
     }
 
     /**
@@ -97,15 +102,25 @@ public final class EncryptionKeys {
         KeyFactory kf = KeyFactory.getInstance("RSA");
 
         // Load public key
-        X509EncodedKeySpec pubKs = new X509EncodedKeySpec(Files.readAllBytes(publicKeyPath));
+        X509EncodedKeySpec pubKs = new X509EncodedKeySpec(loadPem(publicKeyPath));
         this.publicKey = kf.generatePublic(pubKs);
 
         // Load private key
-        PKCS8EncodedKeySpec pvtKs = new PKCS8EncodedKeySpec(Files.readAllBytes(privateKeyPath));
+        PKCS8EncodedKeySpec pvtKs = new PKCS8EncodedKeySpec(loadPem(privateKeyPath));
         this.privateKey = kf.generatePrivate(pvtKs);
 
         // Load JWKSet
-        this.jwk = JWKSet.load(homeDir.resolve(PUBLIC_KEY_NAME).toFile());
+        String certString = new String(Files.readAllBytes(publicKeyPath));
+        JWK jwk = RSAKey.parseFromPEMEncodedObjects(certString);
+        this.jwkSet = new JWKSet(jwk);
+    }
+
+    private byte[] loadPem(Path path) throws Exception {
+        String pem = new String(Files.readAllBytes(path));
+        Pattern parse = Pattern.compile("(?m)(?s)^---*BEGIN.*---*$(.*)^---*END.*---*$.*");
+        String pemKey = parse.matcher(pem).replaceFirst("$1");
+
+        return Base64.getMimeDecoder().decode(pemKey);
     }
 
     private void store() {
