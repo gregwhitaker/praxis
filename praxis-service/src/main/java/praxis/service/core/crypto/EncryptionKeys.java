@@ -21,6 +21,9 @@ import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Generates, loads, and stores the RSA key pair to use when encrypting and decrypting events.
+ */
 @Component
 public final class EncryptionKeys {
     private static final Logger LOG = LoggerFactory.getLogger(EncryptionKeys.class);
