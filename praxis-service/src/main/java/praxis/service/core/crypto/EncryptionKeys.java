@@ -20,6 +20,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * Generates, loads, and stores the RSA key pair to use when encrypting and decrypting events.
@@ -31,26 +32,24 @@ public final class EncryptionKeys {
     private static final String PUBLIC_KEY_NAME = "praxis.pub";
     private static final String PRIVATE_KEY_NAME = "praxis.key";
 
-    @Autowired
-    private PraxisSettings settings;
-
-    @Autowired
-    @Qualifier("homeDir")
-    private Path homeDir;
-
-    private Path publicKeyFile;
-    private Path privateKeyFile;
+    private final PraxisSettings settings;
+    private final Path homeDir;
+    private final Path publicKeyPath;
+    private final Path privateKeyPath;
     private JWKSet jwk;
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
-    public EncryptionKeys() throws Exception {
-        this.publicKeyFile = homeDir.resolve(PUBLIC_KEY_NAME);
-        this.privateKeyFile = homeDir.resolve(PRIVATE_KEY_NAME);
+    @Autowired
+    public EncryptionKeys(@Qualifier("homeDir") Path homeDir, PraxisSettings settings) throws Exception {
+        this.homeDir = homeDir;
+        this.settings = settings;
+        this.publicKeyPath = homeDir.resolve(PUBLIC_KEY_NAME);
+        this.privateKeyPath = homeDir.resolve(PRIVATE_KEY_NAME);
 
         LOG.debug("Initializing {}", this.getClass().getSimpleName());
 
-        if (Files.notExists(publicKeyFile) || Files.notExists(privateKeyFile)) {
+        if (Files.notExists(publicKeyPath) || Files.notExists(privateKeyPath)) {
             // Don't automatically generate encryption keys unless explicitly configured
             if (!settings.isAutogenerateKeys()) {
                 throw new RuntimeException("Cannot auto-generate new encryption keys because property 'praxis.autogenerate-keys` is `false`");
@@ -98,11 +97,11 @@ public final class EncryptionKeys {
         KeyFactory kf = KeyFactory.getInstance("RSA");
 
         // Load public key
-        X509EncodedKeySpec pubKs = new X509EncodedKeySpec(Files.readAllBytes(publicKeyFile));
+        X509EncodedKeySpec pubKs = new X509EncodedKeySpec(Files.readAllBytes(publicKeyPath));
         this.publicKey = kf.generatePublic(pubKs);
 
         // Load private key
-        PKCS8EncodedKeySpec pvtKs = new PKCS8EncodedKeySpec(Files.readAllBytes(privateKeyFile));
+        PKCS8EncodedKeySpec pvtKs = new PKCS8EncodedKeySpec(Files.readAllBytes(privateKeyPath));
         this.privateKey = kf.generatePrivate(pvtKs);
 
         // Load JWKSet
@@ -114,18 +113,23 @@ public final class EncryptionKeys {
             throw new RuntimeException("Cannot store 'null' KeyPair");
         }
 
+        Base64.Encoder encoder = Base64.getEncoder();
+
         // Store the public key
-        try (OutputStream os = Files.newOutputStream(this.homeDir.resolve(PUBLIC_KEY_NAME),
-                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-            os.write(this.publicKey.getEncoded());
+        try (OutputStream os = Files.newOutputStream(this.publicKeyPath, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+            os.write("-----BEGIN RSA PUBLIC KEY-----\n".getBytes());
+            os.write(encoder.encode(this.publicKey.getEncoded()));
+            os.write("\n-----END RSA PUBLIC KEY-----\n".getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // Store the private key
-        try (OutputStream os = Files.newOutputStream(this.homeDir.resolve(PRIVATE_KEY_NAME),
+        try (OutputStream os = Files.newOutputStream(this.privateKeyPath,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-            os.write(this.privateKey.getEncoded());
+            os.write("-----BEGIN RSA PRIVATE KEY-----\n".getBytes());
+            os.write(encoder.encode(this.privateKey.getEncoded()));
+            os.write("\n-----END RSA PRIVATE KEY-----\n".getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
