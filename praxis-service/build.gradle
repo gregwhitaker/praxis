@@ -9,16 +9,15 @@ plugins {
 
 dependencies {
     implementation project(':praxis-db')
+    implementation project(':praxis-model')
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'com.zaxxer:HikariCP:3.3.0'
     implementation 'commons-lang:commons-lang:2.6'
     implementation 'commons-codec:commons-codec:1.11'
     implementation 'com.lmax:disruptor:3.4.2'
-    implementation 'com.nimbusds:nimbus-jose-jwt:8.2.1'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.64'
 
     runtimeOnly 'org.postgresql:postgresql'
 

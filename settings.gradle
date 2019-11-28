@@ -3,4 +3,5 @@ include 'praxis-service'
 include 'praxis-db'
 include 'praxis-java'
 include 'demo'
+include 'praxis-model'
 

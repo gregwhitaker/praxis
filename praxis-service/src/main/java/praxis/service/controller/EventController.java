@@ -18,14 +18,11 @@ package praxis.service.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import praxis.service.service.EventService;
-import praxis.service.service.PublicKeyService;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
@@ -38,25 +35,10 @@ public class EventController {
     private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     private final EventService eventService;
-    private final PublicKeyService publicKeyService;
 
     @Autowired
-    public EventController(EventService eventService,
-                           PublicKeyService publicKeyService) {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
-        this.publicKeyService = publicKeyService;
-    }
-
-    /**
-     * Get the public encryption key for event ingestion.
-     *
-     * @return
-     */
-    @GetMapping(value = "/events/public_key",
-                produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity> getKey() {
-        return publicKeyService.getKeys()
-                .map(jwkSet -> ResponseEntity.ok(jwkSet.toPublicJWKSet().toJSONObject()));
     }
 
     /**
@@ -70,5 +52,16 @@ public class EventController {
         return eventService.consumeEvent(body)
                 .map((Function<Void, ResponseEntity>) aVoid -> ResponseEntity.status(202).build())
                 .onErrorReturn(ResponseEntity.badRequest().build());
+    }
+
+    /**
+     * Receives incoming ping events.
+     *
+     * @param body event data
+     * @return
+     */
+    @PostMapping("/events/ping")
+    public Mono<ResponseEntity> consumePingEvent(@RequestBody byte[] body) {
+        return null;
     }
 }
