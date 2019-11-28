@@ -15,6 +15,9 @@
  */
 package praxis.model;
 
+/**
+ * Enumeration of Praxis reserved event types.
+ */
 public enum EventType {
     PING(1);
 

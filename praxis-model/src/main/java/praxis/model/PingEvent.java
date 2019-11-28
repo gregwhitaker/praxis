@@ -15,6 +15,9 @@
  */
 package praxis.model;
 
+/**
+ * Event sent by Praxis to capture the usage of an application.
+ */
 public class PingEvent extends EventAttributes implements Event {
 
     private String id;
