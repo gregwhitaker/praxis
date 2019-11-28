@@ -18,7 +18,9 @@ package praxis.service.service;
 import com.nimbusds.jose.jwk.JWKSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import praxis.service.core.crypto.EncryptionKeys;
 import reactor.core.publisher.Mono;
 
 /**
@@ -28,14 +30,15 @@ import reactor.core.publisher.Mono;
 public class PublicKeyService {
     private static final Logger LOG = LoggerFactory.getLogger(PublicKeyService.class);
 
+    @Autowired
+    private EncryptionKeys keys;
+
     /**
      * Gets the public encryption key information as a JWK set.
      *
      * @return
      */
     public Mono<JWKSet> getKeys() {
-        return Mono.fromSupplier(() -> {
-           return null;
-        });
+        return Mono.fromSupplier(() -> keys.getPublicJWK());
     }
 }
