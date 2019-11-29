@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
-public class EncodedDataEvent implements Event {
-    public static final int EVENT_TYPE = 2;
+public class RawDataEvent implements Event {
+    public static final int EVENT_TYPE = 1;
 
     private long timestamp;
-    private byte[] data;
+    private Object data;
+    private Class<?> datatype;
+
+    public RawDataEvent() {
+        // Noop
+    }
+
+    public RawDataEvent(final Object data, final Class<?> datatype) {
+        this.timestamp = System.currentTimeMillis();
+        this.data = data;
+        this.datatype = datatype;
+    }
 
     @Override
     public int getType() {
@@ -34,11 +45,19 @@ public class EncodedDataEvent implements Event {
         this.timestamp = timestamp;
     }
 
-    public byte[] getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(Object data) {
         this.data = data;
+    }
+
+    public Class<?> getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(Class<?> datatype) {
+        this.datatype = datatype;
     }
 }

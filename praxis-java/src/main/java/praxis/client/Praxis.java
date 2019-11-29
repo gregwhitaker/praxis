@@ -17,8 +17,8 @@ package praxis.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.event.EventBuffer;
-import praxis.client.internal.event.RawDataEvent;
+import praxis.client.internal.eventhandling.EventBuffer;
+import praxis.client.internal.eventhandling.RawDataEvent;
 
 /**
  * Praxis client.

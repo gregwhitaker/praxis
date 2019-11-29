@@ -13,17 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
 /**
- * Interface that all events must implement.
+ * Wrapper class that holds events of different types and allows them
+ * to be used within the same lmax disruptor.
  */
-public interface Event {
+public class EventWrapper {
 
-    /**
-     * Gets the type code of the event.
-     *
-     * @return event type code
-     */
-    int getType();
+    private int type;
+    private Event event;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

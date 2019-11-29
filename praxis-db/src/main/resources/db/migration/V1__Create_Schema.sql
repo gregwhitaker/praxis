@@ -15,20 +15,23 @@
 --
 
 CREATE UNLOGGED TABLE event_ledger (
-    led_id      UUID        PRIMARY KEY,
-    led_ts      TIMESTAMP   NOT NULL,
-    pcd_ts      TIMESTAMP,
-    evt_data    BYTEA       NOT NULL
+    led_id          UUID        PRIMARY KEY,
+    led_ts          TIMESTAMP   NOT NULL,
+    led_proc_ts     TIMESTAMP,
+    evt_data        BYTEA       NOT NULL
 )
 -- PARTITION BY RANGE (led_ts)
 WITH (autovacuum_enabled=false);
 
 CREATE TABLE events (
-    evt_id          UUID        PRIMARY KEY,
+    evt_id          UUID            PRIMARY KEY,
     evt_corr_id     UUID,
-    evt_type        BIGINT      NOT NULL,
-    evt_ts          TIMESTAMP   NOT NULL,
-    evt_pcd_ts      TIMESTAMP   NOT NULL,
+    evt_type        BIGINT          NOT NULL,
+    evt_ts          TIMESTAMP       NOT NULL,
+    evt_proc_ts     TIMESTAMP       NOT NULL,
+    evt_app         VARCHAR(250),
+    evt_ins         VARCHAR(250),
+    evt_env         VARCHAR(250),
     evt_attrs       JSONB
 );
 CREATE INDEX events_corr_id ON events(evt_corr_id);

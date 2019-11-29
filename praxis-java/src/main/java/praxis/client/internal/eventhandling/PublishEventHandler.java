@@ -1,4 +1,4 @@
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
 import com.lmax.disruptor.EventHandler;
 

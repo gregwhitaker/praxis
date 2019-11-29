@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmax.disruptor.EventHandler;

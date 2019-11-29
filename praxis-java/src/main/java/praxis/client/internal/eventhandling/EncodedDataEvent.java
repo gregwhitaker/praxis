@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
-/**
- * Wrapper class that holds events of different types and allows them
- * to be used within the same lmax disruptor.
- */
-public class EventWrapper {
+public class EncodedDataEvent implements Event {
+    public static final int EVENT_TYPE = 2;
 
-    private int type;
-    private Event event;
+    private long timestamp;
+    private byte[] data;
 
+    @Override
     public int getType() {
-        return type;
+        return EVENT_TYPE;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public Event getEvent() {
-        return event;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }

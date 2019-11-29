@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.client.internal.event;
+package praxis.client.internal.eventhandling;
 
 import com.lmax.disruptor.EventHandler;
 import com.nimbusds.jose.jwk.JWKSet;
