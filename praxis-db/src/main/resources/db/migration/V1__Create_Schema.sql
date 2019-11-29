@@ -16,19 +16,19 @@
 
 CREATE UNLOGGED TABLE event_ledger (
     led_id          UUID        PRIMARY KEY,
-    led_ts          TIMESTAMP   NOT NULL,
-    led_proc_ts     TIMESTAMP,
+    led_create_ts   TIMESTAMP   NOT NULL,
+    led_process_ts  TIMESTAMP,
     evt_data        BYTEA       NOT NULL
 )
--- PARTITION BY RANGE (led_ts)
+-- PARTITION BY RANGE (led_create_ts)
 WITH (autovacuum_enabled=false);
 
 CREATE TABLE events (
     evt_id          UUID            PRIMARY KEY,
     evt_corr_id     UUID,
     evt_type        BIGINT          NOT NULL,
-    evt_ts          TIMESTAMP       NOT NULL,
-    evt_proc_ts     TIMESTAMP       NOT NULL,
+    evt_create_ts   TIMESTAMP       NOT NULL,
+    evt_process_ts  TIMESTAMP       NOT NULL,
     evt_app         VARCHAR(250),
     evt_ins         VARCHAR(250),
     evt_env         VARCHAR(250),

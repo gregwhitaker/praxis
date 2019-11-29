@@ -27,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import praxis.service.core.logging.LogMessage;
 
+import java.util.UUID;
+
 @Component
 public class EventProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
@@ -52,11 +54,11 @@ public class EventProcessor {
      *
      * @param ledgerId ledger identifier
      */
-    public void schedule(String ledgerId) {
+    public void schedule(UUID ledgerId) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(LogMessage.builder()
                     .withMessage("Event in ledger scheduled for processing")
-                    .withData("ledgerId", ledgerId)
+                    .withData("ledgerId", ledgerId.toString())
                     .build());
         }
 
@@ -74,13 +76,13 @@ public class EventProcessor {
     static class ProcessLedgerEvent {
         static final EventFactory<ProcessLedgerEvent> EVENT_FACTORY = ProcessLedgerEvent::new;
 
-        private String ledgerId;
+        private UUID ledgerId;
 
-        String getLedgerId() {
+        UUID getLedgerId() {
             return ledgerId;
         }
 
-        void setLedgerId(String ledgerId) {
+        void setLedgerId(UUID ledgerId) {
             this.ledgerId = ledgerId;
         }
     }
