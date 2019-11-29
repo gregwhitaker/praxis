@@ -31,6 +31,8 @@ import praxis.client.model.StartupEvent;
 import praxis.client.model.UserDefinedEvent;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+
 /**
  * Praxis client.
  */
@@ -118,6 +120,7 @@ public final class Praxis {
                 .map(tick -> new HeartbeatEvent.Builder()
                         .correlatedEvent(startupEvent)
                         .build())
+                .doOnEach(signal -> LOG.debug("Sending Application Heartbeat"))
                 .subscribe(this::send);
     }
 }
