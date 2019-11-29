@@ -3,3 +3,6 @@ include 'praxis-service'
 include 'praxis-db'
 include 'praxis-java'
 include 'demo'
+include 'praxis-spring-boot-starter'
+include 'praxis-spring-boot-autoconfigure'
+
