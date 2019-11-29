@@ -28,7 +28,7 @@ public class StartupEvent extends BaseEvent {
 
     @Override
     public byte[] toBytes() throws IOException {
-        return MAPPER.writerFor(HeartbeatEvent.class).writeValueAsBytes(this);
+        return MAPPER.writerFor(StartupEvent.class).writeValueAsBytes(this);
     }
 
     public static class Builder {
