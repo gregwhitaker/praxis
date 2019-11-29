@@ -20,20 +20,19 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * Praxis client builder.
  */
-public class PraxisClientBuilder {
+public class PraxisBuilder {
 
     private final PraxisConfiguration config = new PraxisConfiguration();
 
-    public PraxisClientBuilder connect(String hostname, int port) {
+    public PraxisBuilder connect(String hostname, int port) {
         return this.connect(hostname, port, false);
     }
 
-    public PraxisClientBuilder connect(String hostname, int port, boolean enableSSL) {
+    public PraxisBuilder connect(String hostname, int port, boolean enableSSL) {
         this.config.setHostname(hostname);
         this.config.setPort(port);
         this.config.setSslEnabled(enableSSL);
@@ -44,27 +43,27 @@ public class PraxisClientBuilder {
         return new PraxisHeartbeatBuilder(this, this.config);
     }
 
-    public PraxisClientBuilder application(String name) {
+    public PraxisBuilder application(String name) {
         this.config.setApplication(name);
         return this;
     }
 
-    public PraxisClientBuilder instance(String instance) {
+    public PraxisBuilder instance(String instance) {
         this.config.setInstance(instance);
         return this;
     }
 
-    public PraxisClientBuilder environment(String environment) {
+    public PraxisBuilder environment(String environment) {
         this.config.setEnvironment(environment);
         return this;
     }
 
     /**
-     * Creates an instance of the {@link PraxisClient} client.
+     * Creates an instance of the {@link Praxis} client.
      *
      * @return a fully configured instance of the Praxis client
      */
-    public PraxisClient build() {
+    public Praxis build() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -74,6 +73,6 @@ public class PraxisClientBuilder {
             throw new PraxisConfigurationException(violations);
         }
 
-        return new PraxisClient(config);
+        return new Praxis(config);
     }
 }

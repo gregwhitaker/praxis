@@ -23,24 +23,28 @@ import praxis.client.internal.event.RawDataEvent;
 /**
  * Praxis client.
  */
-public final class PraxisClient {
-    private static final Logger LOG = LoggerFactory.getLogger(PraxisClient.class);
+public final class Praxis {
+    private static final Logger LOG = LoggerFactory.getLogger(Praxis.class);
 
     /**
-     * Fluent builder for creating a new instance of the {@link PraxisClient} client.
+     * Fluent builder for creating a new instance of the {@link Praxis} client.
      *
-     * @return the {@link PraxisClientBuilder} to use for creating a new Praxis client
+     * @return the {@link PraxisBuilder} to use for creating a new Praxis client
      */
-    public static PraxisClientBuilder builder() {
-        return new PraxisClientBuilder();
+    public static PraxisBuilder builder() {
+        return new PraxisBuilder();
     }
 
     private final PraxisConfiguration config;
     private final EventBuffer eventBuffer;
 
-    PraxisClient(final PraxisConfiguration config) {
+    Praxis(final PraxisConfiguration config) {
         this.config = config;
         this.eventBuffer = new EventBuffer(config);
+
+        if (config.isHeartbeatEnabled()) {
+            // Start heartbeat
+        }
     }
 
 //    public void send(StartupEvent event) {

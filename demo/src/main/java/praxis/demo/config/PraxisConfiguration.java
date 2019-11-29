@@ -19,10 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import praxis.client.PraxisClient;
-import praxis.client.PraxisHeartbeatBuilder;
+import praxis.client.Praxis;
+import praxis.client.PraxisBuilder;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @Configuration
 public class PraxisConfiguration {
@@ -30,14 +31,27 @@ public class PraxisConfiguration {
     @Autowired
     Environment environment;
 
+    /**
+     * Get an instance of the Praxis client.
+     *
+     * @return praxis client
+     */
     @Bean
-    public PraxisClient praxis() {
-        return PraxisClient.builder()
-                .connect("localhost", 8080)
+    public Praxis praxis() {
+        PraxisBuilder builder = Praxis.builder();
+
+        builder.connect("localhost", 8080)
                 .application("demo")
                 .heartbeat()
                     .interval(Duration.ofMinutes(1))
-                    .build()
-                .build();
+                    .build();
+
+        if (environment.getActiveProfiles().length > 0) {
+            builder.environment(environment.getActiveProfiles()[0]);
+        }
+
+        builder.instance(UUID.randomUUID().toString());
+
+        return builder.build();
     }
 }

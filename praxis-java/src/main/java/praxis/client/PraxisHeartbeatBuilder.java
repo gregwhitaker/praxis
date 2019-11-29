@@ -4,10 +4,10 @@ import java.time.Duration;
 
 public class PraxisHeartbeatBuilder {
 
-    private PraxisClientBuilder clientBuilder;
+    private PraxisBuilder clientBuilder;
     private PraxisConfiguration config;
 
-    public PraxisHeartbeatBuilder(PraxisClientBuilder clientBuilder, PraxisConfiguration config) {
+    public PraxisHeartbeatBuilder(PraxisBuilder clientBuilder, PraxisConfiguration config) {
         this.clientBuilder = clientBuilder;
         this.config = config;
         this.config.setHeartbeat(new PraxisConfiguration.Heartbeat());
@@ -18,7 +18,7 @@ public class PraxisHeartbeatBuilder {
         return this;
     }
 
-    public PraxisClientBuilder build() {
+    public PraxisBuilder build() {
         return clientBuilder;
     }
 }
