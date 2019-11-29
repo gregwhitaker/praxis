@@ -23,12 +23,14 @@ import java.util.UUID;
 public class UserDefinedEvent extends BaseEvent {
 
     private UserDefinedEvent(UUID id,
+                             UUID correlatedId,
                              long timestamp,
                              String application,
                              String instance,
                              String environment,
                              Map<String, Object> attributes) {
         this.id = id;
+        this.correlatedId = correlatedId;
         this.timestamp = timestamp;
         this.application = application;
         this.instance = instance;
@@ -48,10 +50,24 @@ public class UserDefinedEvent extends BaseEvent {
 
     public static class Builder {
 
+        private UUID correlatedId = null;
         private String application = null;
         private String instance = null;
         private String environment = null;
         private final Map<String, Object> attributes = new HashMap<>();
+
+        public UserDefinedEvent.Builder correlatedEvent(BaseEvent event) {
+            this.correlatedId = event.getId();
+            this.application = event.getApplication();
+            this.instance = event.getInstance();
+            this.environment = event.getEnvironment();
+            return this;
+        }
+
+        public UserDefinedEvent.Builder correlatedEvent(UUID eventId) {
+            this.correlatedId = eventId;
+            return this;
+        }
 
         public UserDefinedEvent.Builder application(String application) {
             this.application = application;
@@ -80,6 +96,7 @@ public class UserDefinedEvent extends BaseEvent {
 
         public UserDefinedEvent build() {
             return new UserDefinedEvent(UUID.randomUUID(),
+                    correlatedId,
                     System.currentTimeMillis(),
                     application,
                     instance,

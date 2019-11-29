@@ -23,12 +23,14 @@ import java.util.UUID;
 public class ShutdownEvent extends BaseEvent {
 
     private ShutdownEvent(UUID id,
+                          UUID correlatedId,
                           long timestamp,
                           String application,
                           String instance,
                           String environment,
                           Map<String, Object> attributes) {
         this.id = id;
+        this.correlatedId = correlatedId;
         this.timestamp = timestamp;
         this.application = application;
         this.instance = instance;
@@ -48,10 +50,24 @@ public class ShutdownEvent extends BaseEvent {
 
     public static class Builder {
 
+        private UUID correlatedId = null;
         private String application = null;
         private String instance = null;
         private String environment = null;
         private final Map<String, Object> attributes = new HashMap<>();
+
+        public ShutdownEvent.Builder correlatedEvent(BaseEvent event) {
+            this.correlatedId = event.getId();
+            this.application = event.getApplication();
+            this.instance = event.getInstance();
+            this.environment = event.getEnvironment();
+            return this;
+        }
+
+        public ShutdownEvent.Builder correlatedEvent(UUID eventId) {
+            this.correlatedId = eventId;
+            return this;
+        }
 
         public ShutdownEvent.Builder application(String application) {
             this.application = application;
@@ -75,6 +91,7 @@ public class ShutdownEvent extends BaseEvent {
 
         public ShutdownEvent build() {
             return new ShutdownEvent(UUID.randomUUID(),
+                    correlatedId,
                     System.currentTimeMillis(),
                     application,
                     instance,

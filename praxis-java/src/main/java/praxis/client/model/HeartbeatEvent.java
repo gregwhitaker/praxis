@@ -23,12 +23,14 @@ import java.util.UUID;
 public class HeartbeatEvent extends BaseEvent {
 
     private HeartbeatEvent(UUID id,
+                           UUID correlatedId,
                            long timestamp,
                            String application,
                            String instance,
                            String environment,
                            Map<String, Object> attributes) {
         this.id = id;
+        this.correlatedId = correlatedId;
         this.timestamp = timestamp;
         this.application = application;
         this.instance = instance;
@@ -92,6 +94,7 @@ public class HeartbeatEvent extends BaseEvent {
 
         public HeartbeatEvent build() {
             return new HeartbeatEvent(UUID.randomUUID(),
+                    correlatedId,
                     System.currentTimeMillis(),
                     application,
                     instance,
