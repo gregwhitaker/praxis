@@ -80,14 +80,7 @@ public final class Praxis {
             long seq = ringBuffer.next();
 
             Event evt = ringBuffer.get(seq);
-            evt.setId(event.getId());
-            evt.setTimestamp(System.currentTimeMillis());
-
-            try {
-                evt.setData(event.toBytes());
-            } catch (IOException e) {
-                LOG.error("Failed to serialize Praxis event", e);
-            }
+            evt.setWrappedEvent(event);
 
             ringBuffer.publish(seq);
         }

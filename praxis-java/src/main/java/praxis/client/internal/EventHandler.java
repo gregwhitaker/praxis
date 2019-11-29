@@ -15,6 +15,10 @@
  */
 package praxis.client.internal;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.PraxisConfiguration;
@@ -22,12 +26,26 @@ import praxis.client.PraxisConfiguration;
 public class EventHandler implements com.lmax.disruptor.EventHandler<Event> {
     private static final Logger LOG = LoggerFactory.getLogger(EventHandler.class);
 
-    public EventHandler(PraxisConfiguration config) {
+    private final String url;
+    private final OkHttpClient httpClient = new OkHttpClient();
 
+    public EventHandler(PraxisConfiguration config) {
+        this.url = config.getBaseUrl() + "/events";
     }
 
     @Override
     public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
-        LOG.info(event.toString());
+        Request request = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(event.getWrappedEvent().toBytes()))
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                LOG.debug("Published event to Praxis");
+            } else {
+                LOG.error("Event publishing to Praxis failed [code: '{}]", response.code());
+            }
+        }
     }
 }

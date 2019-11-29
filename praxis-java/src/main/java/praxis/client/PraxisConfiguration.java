@@ -40,6 +40,14 @@ public final class PraxisConfiguration {
     private String environment;
     private HeartbeatConfiguration heartbeat;
 
+    public String getBaseUrl() {
+        if (!sslEnabled) {
+            return "http://" + hostname + ":" + port;
+        } else {
+            return "https://" + hostname + ":" + port;
+        }
+    }
+
     public String getHostname() {
         return hostname;
     }
