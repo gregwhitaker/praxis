@@ -15,11 +15,13 @@
  */
 package praxis.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import praxis.client.PraxisClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,9 @@ import java.util.Map;
  */
 @RestController
 public class HelloController {
+
+    @Autowired
+    private PraxisClient praxis;
 
     /**
      * Returns a hello message.

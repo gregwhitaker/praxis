@@ -19,10 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.event.EventBuffer;
 import praxis.client.internal.event.RawDataEvent;
-import praxis.model.HeartbeatEvent;
-import praxis.model.ShutdownEvent;
-import praxis.model.StartupEvent;
-import praxis.model.UserDefinedEvent;
 
 /**
  * Praxis client.
@@ -47,21 +43,21 @@ public final class PraxisClient {
         this.eventBuffer = new EventBuffer(config);
     }
 
-    public void send(StartupEvent event) {
-
-    }
-
-    public void send(HeartbeatEvent event) {
-
-    }
-
-    public void send(ShutdownEvent event) {
-
-    }
-
-    public void send(UserDefinedEvent event) {
-
-    }
+//    public void send(StartupEvent event) {
+//
+//    }
+//
+//    public void send(HeartbeatEvent event) {
+//
+//    }
+//
+//    public void send(ShutdownEvent event) {
+//
+//    }
+//
+//    public void send(UserDefinedEvent event) {
+//
+//    }
 
     /**
      *

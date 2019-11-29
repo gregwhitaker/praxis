@@ -20,6 +20,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Praxis client builder.
@@ -29,14 +30,18 @@ public class PraxisClientBuilder {
     private final PraxisConfiguration config = new PraxisConfiguration();
 
     public PraxisClientBuilder connect(String hostname, int port) {
+        return this.connect(hostname, port, false);
+    }
+
+    public PraxisClientBuilder connect(String hostname, int port, boolean enableSSL) {
         this.config.setHostname(hostname);
         this.config.setPort(port);
+        this.config.setSslEnabled(enableSSL);
         return this;
     }
 
-    public PraxisClientBuilder enableSSL() {
-        this.config.setSslEnabled(true);
-        return this;
+    public PraxisHeartbeatBuilder heartbeat() {
+        return new PraxisHeartbeatBuilder(this, this.config);
     }
 
     public PraxisClientBuilder application(String name) {

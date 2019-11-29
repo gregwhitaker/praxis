@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.time.Duration;
 
 /**
  * Praxis client configuration.
@@ -37,6 +38,7 @@ public final class PraxisConfiguration {
     private String application;
     private String instance;
     private String environment;
+    private Heartbeat heartbeat;
 
     public String getHostname() {
         return hostname;
@@ -84,5 +86,33 @@ public final class PraxisConfiguration {
 
     public void setEnvironment(String environment) {
         this.environment = environment;
+    }
+
+    public boolean isHeartbeatEnabled() {
+        return getHeartbeat() != null;
+    }
+
+    public Heartbeat getHeartbeat() {
+        return heartbeat;
+    }
+
+    public void setHeartbeat(Heartbeat heartbeat) {
+        this.heartbeat = heartbeat;
+    }
+
+    /**
+     *
+     */
+    public static final class Heartbeat {
+
+        private Duration interval = Duration.ofMinutes(1);
+
+        public Duration getInterval() {
+            return interval;
+        }
+
+        public void setInterval(Duration interval) {
+            this.interval = interval;
+        }
     }
 }

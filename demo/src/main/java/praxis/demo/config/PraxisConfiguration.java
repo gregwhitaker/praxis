@@ -13,20 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package praxis.demo.core.reporting;
+package praxis.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import praxis.client.PraxisClient;
+import praxis.client.PraxisHeartbeatBuilder;
+
+import java.time.Duration;
 
 @Configuration
 public class PraxisConfiguration {
+
+    @Autowired
+    Environment environment;
 
     @Bean
     public PraxisClient praxis() {
         return PraxisClient.builder()
                 .connect("localhost", 8080)
-                .application("praxis-demo")
+                .application("demo")
+                .heartbeat()
+                    .interval(Duration.ofMinutes(1))
+                    .build()
                 .build();
     }
 }
