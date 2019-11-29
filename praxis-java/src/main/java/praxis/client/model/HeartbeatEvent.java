@@ -51,10 +51,24 @@ public class HeartbeatEvent extends BaseEvent {
      */
     public static class Builder {
 
+        private UUID correlatedId = null;
         private String application = null;
         private String instance = null;
         private String environment = null;
         private final Map<String, Object> attributes = new HashMap<>();
+
+        public HeartbeatEvent.Builder correlatedEvent(BaseEvent event) {
+            this.correlatedId = event.getId();
+            this.application = event.getApplication();
+            this.instance = event.getInstance();
+            this.environment = event.getEnvironment();
+            return this;
+        }
+
+        public HeartbeatEvent.Builder correlatedEvent(UUID eventId) {
+            this.correlatedId = eventId;
+            return this;
+        }
 
         public HeartbeatEvent.Builder application(String application) {
             this.application = application;

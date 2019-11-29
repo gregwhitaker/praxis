@@ -112,6 +112,18 @@ public final class Praxis {
     }
 
     private void startHeartbeat() {
+        LOG.info("Starting application heartbeat...");
 
+        StartupEvent startupEvent = new StartupEvent.Builder()
+                .application(config.getApplication())
+                .instance(config.getInstance())
+                .environment(config.getEnvironment())
+                .build();
+
+        send(startupEvent);
+
+        new HeartbeatEvent.Builder()
+                .correlatedEvent(startupEvent)
+                .build();
     }
 }

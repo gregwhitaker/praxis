@@ -23,10 +23,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public abstract class BaseEvent {
-
-    protected static ObjectMapper MAPPER = new ObjectMapper();
+    protected final static ObjectMapper MAPPER = new ObjectMapper();
 
     protected UUID id;
+    protected UUID correlatedId;
     protected long timestamp;
     protected String application;
     protected String instance;
@@ -39,6 +39,10 @@ public abstract class BaseEvent {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getCorrelatedId() {
+        return correlatedId;
     }
 
     public long getTimestamp() {
