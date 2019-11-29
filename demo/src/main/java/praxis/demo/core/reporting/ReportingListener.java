@@ -65,6 +65,11 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         eventData.put("os", os.toString());
         eventData.put("uptime", FormatUtil.formatElapsedSecs(os.getSystemUptime()));
 
+        praxis.send(new HeartbeatEvent.Builder()
+                .attribute("test", 4)
+                .attribute("test2", "afdsfsf")
+                .build());
+
 //        praxis.event(eventData, Map.class);
 //
 //        praxis.event("test", String.class);
