@@ -41,6 +41,21 @@ public class HeartbeatEvent extends BaseEvent {
         private String environment = null;
         private final Map<String, Object> attributes = new HashMap<>();
 
+        public HeartbeatEvent.Builder application(String application) {
+            this.application = application;
+            return this;
+        }
+
+        public HeartbeatEvent.Builder instance(String instance) {
+            this.instance = instance;
+            return this;
+        }
+
+        public HeartbeatEvent.Builder environment(String environment) {
+            this.environment = environment;
+            return this;
+        }
+
         public Builder attribute(String key, Object value) {
             this.attributes.put(key, value);
             return this;

@@ -38,6 +38,21 @@ public class StartupEvent extends BaseEvent {
         private String environment = null;
         private final Map<String, Object> attributes = new HashMap<>();
 
+        public StartupEvent.Builder application(String application) {
+            this.application = application;
+            return this;
+        }
+
+        public StartupEvent.Builder instance(String instance) {
+            this.instance = instance;
+            return this;
+        }
+
+        public StartupEvent.Builder environment(String environment) {
+            this.environment = environment;
+            return this;
+        }
+
         public StartupEvent.Builder attribute(String key, Object value) {
             this.attributes.put(key, value);
             return this;
