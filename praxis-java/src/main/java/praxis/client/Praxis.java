@@ -24,10 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.Event;
 import praxis.client.internal.EventHandler;
+import praxis.client.model.BaseEvent;
 import praxis.client.model.HeartbeatEvent;
 import praxis.client.model.ShutdownEvent;
 import praxis.client.model.StartupEvent;
 import praxis.client.model.UserDefinedEvent;
+
+import java.io.IOException;
 
 /**
  * Praxis client.
@@ -57,35 +60,37 @@ public final class Praxis {
     }
 
     public void send(StartupEvent event) {
-        long seq = ringBuffer.next();
-
-        Event evt = ringBuffer.get(seq);
-
-        ringBuffer.publish(seq);
+        sendInternal(event);
     }
 
     public void send(HeartbeatEvent event) {
-        long seq = ringBuffer.next();
-
-        Event evt = ringBuffer.get(seq);
-
-        ringBuffer.publish(seq);
+        sendInternal(event);
     }
 
     public void send(ShutdownEvent event) {
-        long seq = ringBuffer.next();
-
-        Event evt = ringBuffer.get(seq);
-
-        ringBuffer.publish(seq);
+        sendInternal(event);
     }
 
     public void send(UserDefinedEvent event) {
-        long seq = ringBuffer.next();
+        sendInternal(event);
+    }
 
-        Event evt = ringBuffer.get(seq);
+    private void sendInternal(BaseEvent event) {
+        if (event != null) {
+            long seq = ringBuffer.next();
 
-        ringBuffer.publish(seq);
+            Event evt = ringBuffer.get(seq);
+            evt.setId(event.getId());
+            evt.setTimestamp(System.currentTimeMillis());
+
+            try {
+                evt.setData(event.toBytes());
+            } catch (IOException e) {
+                LOG.error("Failed to serialize Praxis event", e);
+            }
+
+            ringBuffer.publish(seq);
+        }
     }
 
     /**
