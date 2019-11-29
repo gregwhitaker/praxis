@@ -15,33 +15,52 @@
  */
 package praxis.client;
 
-import com.nimbusds.jose.jwk.RSAKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import praxis.client.internal.event.EventBuffer;
 import praxis.client.internal.event.RawDataEvent;
+import praxis.model.HeartbeatEvent;
+import praxis.model.ShutdownEvent;
+import praxis.model.StartupEvent;
+import praxis.model.UserDefinedEvent;
 
 /**
  * Praxis client.
  */
-public final class Praxis {
-    private static final Logger LOG = LoggerFactory.getLogger(Praxis.class);
+public final class PraxisClient {
+    private static final Logger LOG = LoggerFactory.getLogger(PraxisClient.class);
 
     /**
-     * Fluent builder for creating a new instance of the {@link Praxis} client.
+     * Fluent builder for creating a new instance of the {@link PraxisClient} client.
      *
-     * @return the {@link PraxisBuilder} to use for creating a new Praxis client
+     * @return the {@link PraxisClientBuilder} to use for creating a new Praxis client
      */
-    public static PraxisBuilder builder() {
-        return new PraxisBuilder();
+    public static PraxisClientBuilder builder() {
+        return new PraxisClientBuilder();
     }
 
     private final PraxisConfiguration config;
     private final EventBuffer eventBuffer;
 
-    Praxis(final PraxisConfiguration config) {
+    PraxisClient(final PraxisConfiguration config) {
         this.config = config;
         this.eventBuffer = new EventBuffer(config);
+    }
+
+    public void send(StartupEvent event) {
+
+    }
+
+    public void send(HeartbeatEvent event) {
+
+    }
+
+    public void send(ShutdownEvent event) {
+
+    }
+
+    public void send(UserDefinedEvent event) {
+
     }
 
     /**

@@ -33,7 +33,10 @@ public final class PraxisConfiguration {
     @Max(value = 65_535, message = "Port number must be between 0 and 65535")
     private int port = 80;
 
-    private boolean ssl = false;
+    private boolean sslEnabled = false;
+    private String application;
+    private String instance;
+    private String environment;
 
     public String getHostname() {
         return hostname;
@@ -51,11 +54,35 @@ public final class PraxisConfiguration {
         this.port = port;
     }
 
-    public boolean isSsl() {
-        return ssl;
+    public boolean isSslEnabled() {
+        return sslEnabled;
     }
 
-    public void setSsl(boolean ssl) {
-        this.ssl = ssl;
+    public void setSslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+    }
+
+    public String getApplication() {
+        return application;
+    }
+
+    public void setApplication(String application) {
+        this.application = application;
+    }
+
+    public String getInstance() {
+        return instance;
+    }
+
+    public void setInstance(String instance) {
+        this.instance = instance;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
     }
 }

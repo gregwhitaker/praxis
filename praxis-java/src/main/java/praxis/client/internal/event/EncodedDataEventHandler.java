@@ -70,7 +70,7 @@ public class EncodedDataEventHandler implements EventHandler<EventWrapper> {
     private String getBasePraxisUrl(PraxisConfiguration config) {
         StringBuilder urlBuilder = new StringBuilder();
 
-        if (config.isSsl()) {
+        if (config.isSslEnabled()) {
             urlBuilder.append("https://");
             urlBuilder.append(config.getHostname());
 

@@ -24,38 +24,42 @@ import java.util.Set;
 /**
  * Praxis client builder.
  */
-public class PraxisBuilder {
+public class PraxisClientBuilder {
 
     private final PraxisConfiguration config = new PraxisConfiguration();
 
-    /**
-     * Sets the hostname of the Praxis service to which to connect this client.
-     *
-     * @param hostname
-     * @return
-     */
-    public PraxisBuilder hostname(String hostname) {
+    public PraxisClientBuilder connect(String hostname, int port) {
         this.config.setHostname(hostname);
-        return this;
-    }
-
-    /**
-     * Sets the port of the Praxis service to which to connect this client.
-     *
-     * @param port
-     * @return
-     */
-    public PraxisBuilder port(int port) {
         this.config.setPort(port);
         return this;
     }
 
+    public PraxisClientBuilder enableSSL() {
+        this.config.setSslEnabled(true);
+        return this;
+    }
+
+    public PraxisClientBuilder application(String name) {
+        this.config.setApplication(name);
+        return this;
+    }
+
+    public PraxisClientBuilder instance(String instance) {
+        this.config.setInstance(instance);
+        return this;
+    }
+
+    public PraxisClientBuilder environment(String environment) {
+        this.config.setEnvironment(environment);
+        return this;
+    }
+
     /**
-     * Creates an instance of the {@link Praxis} client.
+     * Creates an instance of the {@link PraxisClient} client.
      *
      * @return a fully configured instance of the Praxis client
      */
-    public Praxis build() {
+    public PraxisClient build() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -65,6 +69,6 @@ public class PraxisBuilder {
             throw new PraxisConfigurationException(violations);
         }
 
-        return new Praxis(config);
+        return new PraxisClient(config);
     }
 }

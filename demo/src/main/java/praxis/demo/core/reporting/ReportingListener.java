@@ -27,7 +27,7 @@ import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import oshi.util.FormatUtil;
-import praxis.client.Praxis;
+import praxis.client.PraxisClient;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
     private static final Logger LOG = LoggerFactory.getLogger(ReportingListener.class);
 
     @Autowired
-    private Praxis praxis;
+    private PraxisClient praxis;
 
     private License license;
 
