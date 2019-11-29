@@ -28,6 +28,7 @@ import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import oshi.util.FormatUtil;
 import praxis.client.Praxis;
+import praxis.client.model.UserDefinedEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -64,5 +65,10 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         eventData.put("os", os.toString());
         eventData.put("uptime", FormatUtil.formatElapsedSecs(os.getSystemUptime()));
 
+        praxis.send(new UserDefinedEvent.Builder()
+                        .application("demo")
+                        .attribute("test", "somevalue")
+                        .attribute("test1", 1)
+                        .build());
     }
 }
