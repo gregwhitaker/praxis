@@ -122,8 +122,8 @@ public final class Praxis {
 
         send(startupEvent);
 
-        new HeartbeatEvent.Builder()
-                .correlatedEvent(startupEvent)
-                .build();
+//        new HeartbeatEvent.Builder()
+//                .correlatedEvent(startupEvent)
+//                .build();
     }
 }

@@ -15,9 +15,12 @@
  */
 package praxis.client.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import praxis.client.PraxisConfiguration;
 
 public class EventHandler implements com.lmax.disruptor.EventHandler<Event> {
+    private static final Logger LOG = LoggerFactory.getLogger(EventHandler.class);
 
     public EventHandler(PraxisConfiguration config) {
 
@@ -25,6 +28,6 @@ public class EventHandler implements com.lmax.disruptor.EventHandler<Event> {
 
     @Override
     public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
-
+        LOG.info(event.toString());
     }
 }
