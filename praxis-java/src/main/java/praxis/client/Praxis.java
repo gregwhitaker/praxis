@@ -15,10 +15,19 @@
  */
 package praxis.client;
 
+import com.lmax.disruptor.BusySpinWaitStrategy;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import praxis.client.internal.eventhandling.EventBuffer;
-import praxis.client.internal.eventhandling.RawDataEvent;
+import praxis.client.internal.Event;
+import praxis.client.internal.EventHandler;
+import praxis.client.model.HeartbeatEvent;
+import praxis.client.model.ShutdownEvent;
+import praxis.client.model.StartupEvent;
+import praxis.client.model.UserDefinedEvent;
 
 /**
  * Praxis client.
@@ -36,40 +45,68 @@ public final class Praxis {
     }
 
     private final PraxisConfiguration config;
-    private final EventBuffer eventBuffer;
+    private final RingBuffer<Event> ringBuffer;
 
     Praxis(final PraxisConfiguration config) {
         this.config = config;
-        this.eventBuffer = new EventBuffer(config);
+        this.ringBuffer = createRingBuffer(config);
 
         if (config.isHeartbeatEnabled()) {
-            // Start heartbeat
+            startHeartbeat();
         }
     }
 
-//    public void send(StartupEvent event) {
-//
-//    }
-//
-//    public void send(HeartbeatEvent event) {
-//
-//    }
-//
-//    public void send(ShutdownEvent event) {
-//
-//    }
-//
-//    public void send(UserDefinedEvent event) {
-//
-//    }
+    public void send(StartupEvent event) {
+        long seq = ringBuffer.next();
+
+        Event evt = ringBuffer.get(seq);
+
+        ringBuffer.publish(seq);
+    }
+
+    public void send(HeartbeatEvent event) {
+        long seq = ringBuffer.next();
+
+        Event evt = ringBuffer.get(seq);
+
+        ringBuffer.publish(seq);
+    }
+
+    public void send(ShutdownEvent event) {
+        long seq = ringBuffer.next();
+
+        Event evt = ringBuffer.get(seq);
+
+        ringBuffer.publish(seq);
+    }
+
+    public void send(UserDefinedEvent event) {
+        long seq = ringBuffer.next();
+
+        Event evt = ringBuffer.get(seq);
+
+        ringBuffer.publish(seq);
+    }
 
     /**
      *
-     * @param data
-     * @param datatype
-     * @param <T>
+     * @param config
+     * @return
      */
-    public <T> void event(T data, Class<T> datatype) {
-        eventBuffer.publish(new RawDataEvent(data, datatype));
+    private RingBuffer<Event> createRingBuffer(PraxisConfiguration config) {
+        Disruptor<Event> disruptor = new Disruptor<>(
+                Event::new,
+                1024,
+                DaemonThreadFactory.INSTANCE,
+                ProducerType.SINGLE,
+                new BusySpinWaitStrategy());
+
+        disruptor.handleEventsWith(new EventHandler(config));
+
+        return disruptor.start();
+    }
+
+    private void startHeartbeat() {
+
     }
 }

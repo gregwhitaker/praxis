@@ -38,7 +38,7 @@ public final class PraxisConfiguration {
     private String application;
     private String instance;
     private String environment;
-    private Heartbeat heartbeat;
+    private HeartbeatConfiguration heartbeat;
 
     public String getHostname() {
         return hostname;
@@ -92,18 +92,18 @@ public final class PraxisConfiguration {
         return getHeartbeat() != null;
     }
 
-    public Heartbeat getHeartbeat() {
+    public HeartbeatConfiguration getHeartbeat() {
         return heartbeat;
     }
 
-    public void setHeartbeat(Heartbeat heartbeat) {
+    public void setHeartbeat(HeartbeatConfiguration heartbeat) {
         this.heartbeat = heartbeat;
     }
 
     /**
      *
      */
-    public static final class Heartbeat {
+    public static final class HeartbeatConfiguration {
 
         private Duration interval = Duration.ofMinutes(1);
 

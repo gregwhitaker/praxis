@@ -10,7 +10,7 @@ public class PraxisHeartbeatBuilder {
     public PraxisHeartbeatBuilder(PraxisBuilder clientBuilder, PraxisConfiguration config) {
         this.clientBuilder = clientBuilder;
         this.config = config;
-        this.config.setHeartbeat(new PraxisConfiguration.Heartbeat());
+        this.config.setHeartbeat(new PraxisConfiguration.HeartbeatConfiguration());
     }
 
     public PraxisHeartbeatBuilder interval(Duration interval) {
