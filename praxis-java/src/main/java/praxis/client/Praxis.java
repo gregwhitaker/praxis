@@ -29,8 +29,7 @@ import praxis.client.model.HeartbeatEvent;
 import praxis.client.model.ShutdownEvent;
 import praxis.client.model.StartupEvent;
 import praxis.client.model.UserDefinedEvent;
-
-import java.io.IOException;
+import reactor.core.publisher.Flux;
 
 /**
  * Praxis client.
@@ -115,8 +114,10 @@ public final class Praxis {
 
         send(startupEvent);
 
-//        new HeartbeatEvent.Builder()
-//                .correlatedEvent(startupEvent)
-//                .build();
+        Flux.interval(config.getHeartbeat().getInterval())
+                .map(tick -> new HeartbeatEvent.Builder()
+                        .correlatedEvent(startupEvent)
+                        .build())
+                .subscribe(this::send);
     }
 }

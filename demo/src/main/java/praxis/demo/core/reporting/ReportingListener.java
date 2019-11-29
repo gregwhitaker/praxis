@@ -28,7 +28,6 @@ import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import oshi.util.FormatUtil;
 import praxis.client.Praxis;
-import praxis.client.model.HeartbeatEvent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -65,13 +64,5 @@ public class ReportingListener implements ApplicationListener<ContextRefreshedEv
         eventData.put("os", os.toString());
         eventData.put("uptime", FormatUtil.formatElapsedSecs(os.getSystemUptime()));
 
-        praxis.send(new HeartbeatEvent.Builder()
-                .attribute("test", 4)
-                .attribute("test2", "afdsfsf")
-                .build());
-
-//        praxis.event(eventData, Map.class);
-//
-//        praxis.event("test", String.class);
     }
 }

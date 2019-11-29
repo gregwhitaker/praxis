@@ -17,8 +17,6 @@ package praxis.client.internal;
 
 import praxis.client.model.BaseEvent;
 
-import java.util.UUID;
-
 public class Event {
 
     private BaseEvent wrappedEvent;
