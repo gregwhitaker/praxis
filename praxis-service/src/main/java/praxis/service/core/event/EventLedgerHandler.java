@@ -32,6 +32,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * Processes new events that are entered into the ledger.
+ */
 @Component
 public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLedgerEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(EventLedgerHandler.class);
@@ -64,6 +67,7 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
 
                         Event newEvent = MAPPER.readerFor(Event.class).readValue(eventBytes);
 
+                        // Decomposing new event in ledger and inserting into event table
                         try (PreparedStatement ips = conn.prepareStatement(insertSql)) {
                             ips.setObject(1, newEvent.getId());
                             ips.setObject(2, newEvent.getCorrelatedId());
@@ -78,7 +82,7 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
                             ips.executeUpdate();
                         }
 
-                        // Updating the processed timestamp
+                        // Updating the processed timestamp on the ledger
                         rs.updateTimestamp("led_process_ts", Timestamp.from(Instant.now()));
                         rs.updateRow();
                     }
