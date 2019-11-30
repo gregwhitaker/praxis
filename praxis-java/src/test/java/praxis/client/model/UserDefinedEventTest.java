@@ -11,4 +11,13 @@ public class UserDefinedEventTest {
 
         Assert.assertEquals(EventType.USER_DEFINED.getValue(), event.getType());
     }
+
+    @Test
+    public void shouldAddUserEventTypeToAttributes() {
+        UserDefinedEvent event = new UserDefinedEvent.Builder()
+                .userEventType(123)
+                .build();
+
+        Assert.assertEquals(123L, event.attributes.get("userEventType"));
+    }
 }
