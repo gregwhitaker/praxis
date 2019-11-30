@@ -26,9 +26,22 @@ The following environment variables can be used to configure the database migrat
 ### System Properties
 The following system properties can be used to configure the database migrator:
 
+| Variable | Description |
+|----------|-------------|
+| db.jdbcUrl | Database JDBC connection URL |
+| db.username | Database username |
+| db.password | Database password |
+| db.env      | Database environment name (controls which initial data is loaded)
+
 ### Command Line Arguments
 The following command line arguments can be used to configure the database migrator:
-
+        
+| Variable | Description |
+|----------|-------------|
+| --jdbcUrl | Database JDBC connection URL |
+| --username | Database username |
+| --password | Database password |
+| --env      | Database environment name (controls which initial data is loaded)
 
 ## Development
 
