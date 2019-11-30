@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Data access layer that queries and updates the event_ledger table.
+ */
 @Component
 public class EventLedgerDao {
     private static final Logger LOG = LoggerFactory.getLogger(EventLedgerDao.class);
@@ -39,6 +42,12 @@ public class EventLedgerDao {
     @Autowired
     private DataSource dataSource;
 
+    /**
+     * Finds all unprocessed records in the event ledger.
+     *
+     * @param limit maximum number of records the query will return
+     * @return a list of UUIDs of the unprocessed records
+     */
     public Mono<List<UUID>> findUnprocessedEvents(int limit) {
         return Mono.fromSupplier(() -> {
             try (Connection conn = dataSource.getConnection()) {
@@ -68,7 +77,7 @@ public class EventLedgerDao {
      * Save the data to the consumeEvent ledger.
      *
      * @param data binary data to save
-     * @return
+     * @return the id of the record in the ledger
      */
     public Mono<UUID> save(byte[] data) {
         return Mono.fromSupplier(() -> {

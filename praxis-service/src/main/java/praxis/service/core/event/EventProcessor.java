@@ -25,10 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import praxis.service.core.logging.LogMessage;
 
 import java.util.UUID;
 
+/**
+ * Ring buffer that holds events in the ledger that are ready for processing.
+ */
 @Component
 public class EventProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
@@ -55,12 +57,7 @@ public class EventProcessor {
      * @param ledgerId ledger identifier
      */
     public void schedule(UUID ledgerId) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(LogMessage.builder()
-                    .withMessage("Event in ledger scheduled for processing")
-                    .withData("ledgerId", ledgerId.toString())
-                    .build());
-        }
+        LOG.debug("Ledger event scheduled for processing: '{}'", ledgerId);
 
         long seq = eventBuffer.next();
 

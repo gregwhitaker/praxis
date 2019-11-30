@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Data parsed from the incoming events and added to the database.
+ */
 public class Event {
 
     public UUID id;
@@ -31,7 +34,7 @@ public class Event {
     public final Map<String, Object> attributes = new HashMap<>();
 
     public Event() {
-
+        // Noop
     }
 
     public UUID getId() {

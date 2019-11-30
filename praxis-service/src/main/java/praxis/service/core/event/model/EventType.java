@@ -19,6 +19,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Enumeration of event types.
+ */
 public enum EventType {
     STARTUP(1),
     SHUTDOWN(2),
