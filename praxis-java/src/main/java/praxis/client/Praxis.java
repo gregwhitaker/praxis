@@ -31,8 +31,6 @@ import praxis.client.model.StartupEvent;
 import praxis.client.model.UserDefinedEvent;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
-
 /**
  * Praxis client.
  */

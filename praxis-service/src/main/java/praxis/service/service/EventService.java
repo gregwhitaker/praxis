@@ -15,13 +15,21 @@
  */
 package praxis.service.service;
 
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import praxis.service.core.event.EventProcessor;
 import praxis.service.data.event.EventLedgerDao;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Service that handles incoming events.
@@ -38,6 +46,8 @@ public class EventService {
                         EventProcessor eventProcessor) {
         this.eventLedger = eventLedger;
         this.eventProcessor = eventProcessor;
+
+        startOrphanRecordProcessing();
     }
 
     /**
@@ -50,5 +60,18 @@ public class EventService {
         return eventLedger.save(data)
                 .doOnSuccess(eventProcessor::schedule)
                 .then();
+    }
+
+    /**
+     * Starts a process in the background for collecting and processing any missed events in the ledger.
+     */
+    public void startOrphanRecordProcessing() {
+        Flux.interval(Duration.ofSeconds(10), Duration.ofMinutes(1))
+                .map(tick -> eventLedger.findUnprocessedEvents(100))
+                .flatMap((Function<Mono<List<UUID>>, Publisher<List<UUID>>>) listMono -> listMono)
+                .flatMapSequential((Function<List<UUID>, Publisher<UUID>>) Flux::fromIterable)
+                .doOnEach(uuidSignal -> eventProcessor.schedule(uuidSignal.get()))
+                .subscribeOn(Schedulers.elastic())
+                .subscribe();
     }
 }

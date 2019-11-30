@@ -24,9 +24,12 @@ import reactor.core.publisher.Mono;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -35,6 +38,31 @@ public class EventLedgerDao {
 
     @Autowired
     private DataSource dataSource;
+
+    public Mono<List<UUID>> findUnprocessedEvents(int limit) {
+        return Mono.fromSupplier(() -> {
+            try (Connection conn = dataSource.getConnection()) {
+                final String sql = "SELECT led_id FROM event_ledger WHERE led_process_ts IS NULL LIMIT ?";
+
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setInt(1, limit);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        List<UUID> ids = new ArrayList<>();
+
+                        while (rs.next()) {
+                            ids.add(rs.getObject("led_id", UUID.class));
+                        }
+
+                        return ids;
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Error occurred retrieving unprocessed events from event ledger", e);
+            }
+        });
+    }
 
     /**
      * Save the data to the consumeEvent ledger.
