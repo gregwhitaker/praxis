@@ -4,6 +4,14 @@ Service and clients for generating and ingesting application usage data.
 Provides a framework for ingesting and processing application heartbeats and monitoring how long a customer is using your
 application that is deployed in their infrastructure (ie. ingest phone home events).
 
+## Project Structure
+This repository contains the following projects:
+
+- [praxis-db](praxis-db) - Sets up the PostgreSQL database required by Praxis.
+- [praxis-service](praxis-service) - Service that ingests and processes events.
+- [praxis-java](praxis-java) - Praxis client for Java applications.
+- [demo](demo) - Simple demo application that sends events to Praxis.
+
 ## Bugs and Feedback
 For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/praxis/issues).
 
