@@ -16,6 +16,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mock-server:mockserver-netty:5.7.2'
+    testImplementation 'org.mock-server:mockserver-client-java:5.7.2'
 
     testRuntime 'org.slf4j:slf4j-simple:1.7.25'
 }
