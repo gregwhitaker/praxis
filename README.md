@@ -12,6 +12,11 @@ This repository contains the following projects:
 - [praxis-java](praxis-java) - Praxis client for Java applications.
 - [demo](demo) - Simple demo application that sends events to Praxis.
 
+## Building Praxis
+Run the following command to build Praxis:
+
+    ./gradlew clean buildImage
+
 ## Bugs and Feedback
 For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/praxis/issues).
 
