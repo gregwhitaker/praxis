@@ -24,7 +24,7 @@ public class Event {
     public UUID id;
     public UUID correlatedId;
     public long timestamp;
-    public EventType type;
+    public int type;
     public String application;
     public String instance;
     public String environment;
@@ -58,11 +58,11 @@ public class Event {
         this.timestamp = timestamp;
     }
 
-    public EventType getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public void setType(int type) {
         this.type = type;
     }
 

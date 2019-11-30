@@ -30,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Map;
 
 @Component
 public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLedgerEvent> {
@@ -37,18 +38,6 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
 
     @Autowired
     private DataSource dataSource;
-//
-//    CREATE TABLE events (
-//            evt_id          UUID            PRIMARY KEY,
-//            evt_corr_id     UUID,
-//            evt_type        BIGINT          NOT NULL,
-//            evt_ts          TIMESTAMP       NOT NULL,
-//            evt_proc_ts     TIMESTAMP       NOT NULL,
-//            evt_app         VARCHAR(250),
-//    evt_ins         VARCHAR(250),
-//    evt_env         VARCHAR(250),
-//    evt_attrs       JSONB
-//);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -61,24 +50,36 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
 
         try (Connection conn = dataSource.getConnection()) {
             final String selectSql = "SELECT e.* FROM event_ledger e WHERE led_id = ? FOR UPDATE";
-            final String insertSql = "INSERT INTO events (evt_id, evt_corr_id, evt_type, evt_ts, evt_proc_ts, evt_app, evt_ins, evt_env, evt_attrs) VALUES (?,?,?,?,?,?,?,?,?)";
+            final String insertSql = "INSERT INTO events (evt_id, evt_corr_id, evt_type, evt_ts, evt_process_ts, evt_app, evt_ins, evt_env, evt_attrs) VALUES (?,?,?,?,?,?,?,?,?::JSON)";
 
             // Disable auto commit as we are starting a transaction
             conn.setAutoCommit(false);
 
-            try (PreparedStatement ps = conn.prepareStatement(selectSql, ResultSet.CONCUR_UPDATABLE)) {
+            try (PreparedStatement ps = conn.prepareStatement(selectSql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                 ps.setObject(1, event.getLedgerId());
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         byte[] eventBytes = rs.getBytes("evt_data");
 
-                        System.out.println(new String(eventBytes));
+                        Event newEvent = MAPPER.readerFor(Event.class).readValue(eventBytes);
 
-                        Event baseEvent = MAPPER.readerFor(Event.class).readValue(eventBytes);
+                        try (PreparedStatement ips = conn.prepareStatement(insertSql)) {
+                            ips.setObject(1, newEvent.getId());
+                            ips.setObject(2, newEvent.getCorrelatedId());
+                            ips.setInt(3, newEvent.getType());
+                            ips.setTimestamp(4, new Timestamp(newEvent.getTimestamp()));
+                            ips.setTimestamp(5, Timestamp.from(Instant.now()));
+                            ips.setString(6, newEvent.getApplication());
+                            ips.setString(7, newEvent.getInstance());
+                            ips.setString(8, newEvent.getEnvironment());
+                            ips.setObject(9, MAPPER.writerFor(Map.class).writeValueAsString(newEvent.getAttributes()));
+
+                            ips.executeUpdate();
+                        }
 
                         // Updating the processed timestamp
-                        rs.updateTimestamp("led_proc_ts", Timestamp.from(Instant.now()));
+                        rs.updateTimestamp("led_process_ts", Timestamp.from(Instant.now()));
                         rs.updateRow();
                     }
                 }

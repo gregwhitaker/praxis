@@ -45,7 +45,7 @@ public class EventLedgerDao {
     public Mono<UUID> save(byte[] data) {
         return Mono.fromSupplier(() -> {
            try (Connection conn = dataSource.getConnection()) {
-               final String sql = "INSERT INTO event_ledger (led_id, led_create_ts, evt_data) VALUES (?, ?, ?)";
+               final String sql = "INSERT INTO event_ledger (led_id, led_ts, evt_data) VALUES (?, ?, ?)";
                final UUID newId = UUID.randomUUID();
 
                try (PreparedStatement ps = conn.prepareStatement(sql)) {
