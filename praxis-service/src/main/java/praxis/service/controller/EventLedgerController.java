@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import praxis.service.service.EventLedgerService;
+import praxis.service.service.ledger.EventLedgerService;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
