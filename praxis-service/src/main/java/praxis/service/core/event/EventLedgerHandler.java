@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import praxis.service.core.event.model.Event;
-import praxis.service.core.logging.LogMessage;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -46,10 +45,7 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
 
     @Override
     public void onEvent(EventProcessor.ProcessLedgerEvent event, long sequence, boolean endOfBatch) throws Exception {
-        LOG.debug(LogMessage.builder()
-                .withMessage("Processing Event")
-                .withData("eventId", event.getLedgerId())
-                .build());
+        LOG.debug("Processing event: '{}'", event.getLedgerId());
 
         try (Connection conn = dataSource.getConnection()) {
             final String selectSql = "SELECT e.* FROM event_ledger e WHERE led_id = ? FOR UPDATE";
