@@ -15,8 +15,6 @@
  */
 package praxis.service.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +30,6 @@ import java.util.function.Function;
  */
 @RestController
 public class EventController {
-    private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     private final EventService eventService;
 
@@ -52,16 +49,5 @@ public class EventController {
         return eventService.consumeEvent(body)
                 .map((Function<Void, ResponseEntity>) aVoid -> ResponseEntity.status(202).build())
                 .onErrorReturn(ResponseEntity.badRequest().build());
-    }
-
-    /**
-     * Receives incoming ping events.
-     *
-     * @param body event data
-     * @return
-     */
-    @PostMapping("/events/ping")
-    public Mono<ResponseEntity> consumePingEvent(@RequestBody byte[] body) {
-        return null;
     }
 }
