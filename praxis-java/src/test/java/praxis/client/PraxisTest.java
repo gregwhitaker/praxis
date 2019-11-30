@@ -21,7 +21,12 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.junit.MockServerRule;
 import org.mockserver.verify.VerificationTimes;
+import praxis.client.model.HeartbeatEvent;
+import praxis.client.model.ShutdownEvent;
 import praxis.client.model.StartupEvent;
+import praxis.client.model.UserDefinedEvent;
+
+import java.time.Duration;
 
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -68,5 +73,149 @@ public class PraxisTest {
                                 .withBody(MAPPER.writerFor(StartupEvent.class).writeValueAsString(startupEvent)),
                         VerificationTimes.once()
                 );
+    }
+
+    @Test
+    public void shouldSendHearbeatEvent() throws Exception {
+        // Setup mock Praxis events endpoint
+        mockServerClient
+                .when(
+                        request("/events")
+                                .withMethod("POST")
+                )
+                .respond(
+                        response()
+                                .withStatusCode(202)
+                );
+
+        // Configure Praxis client
+        Praxis praxis = Praxis.builder()
+                .connect(mockServerClient.remoteAddress().getHostName(), mockServerClient.remoteAddress().getPort())
+                .build();
+
+        // Send the event
+        HeartbeatEvent heartbeatEvent = new HeartbeatEvent.Builder().build();
+        praxis.send(heartbeatEvent);
+
+        // Hokey, but we need to wait for the response to get through
+        // async processing in the lmax buffer
+        Thread.sleep(1_000);
+
+        // Verify the event
+        mockServerClient
+                .verify(
+                        request("/events")
+                                .withMethod("POST")
+                                .withBody(MAPPER.writerFor(HeartbeatEvent.class).writeValueAsString(heartbeatEvent)),
+                        VerificationTimes.once()
+                );
+    }
+
+    @Test
+    public void shouldSendShutdownEvent() throws Exception {
+        // Setup mock Praxis events endpoint
+        mockServerClient
+                .when(
+                        request("/events")
+                                .withMethod("POST")
+                )
+                .respond(
+                        response()
+                                .withStatusCode(202)
+                );
+
+        // Configure Praxis client
+        Praxis praxis = Praxis.builder()
+                .connect(mockServerClient.remoteAddress().getHostName(), mockServerClient.remoteAddress().getPort())
+                .build();
+
+        // Send the event
+        ShutdownEvent shutdownEvent = new ShutdownEvent.Builder().build();
+        praxis.send(shutdownEvent);
+
+        // Hokey, but we need to wait for the response to get through
+        // async processing in the lmax buffer
+        Thread.sleep(1_000);
+
+        // Verify the event
+        mockServerClient
+                .verify(
+                        request("/events")
+                                .withMethod("POST")
+                                .withBody(MAPPER.writerFor(ShutdownEvent.class).writeValueAsString(shutdownEvent)),
+                        VerificationTimes.once()
+                );
+    }
+
+    @Test
+    public void shouldUserDefinedEvent() throws Exception {
+        // Setup mock Praxis events endpoint
+        mockServerClient
+                .when(
+                        request("/events")
+                                .withMethod("POST")
+                )
+                .respond(
+                        response()
+                                .withStatusCode(202)
+                );
+
+        // Configure Praxis client
+        Praxis praxis = Praxis.builder()
+                .connect(mockServerClient.remoteAddress().getHostName(), mockServerClient.remoteAddress().getPort())
+                .build();
+
+        // Send the event
+        UserDefinedEvent userDefinedEvent = new UserDefinedEvent.Builder().build();
+        praxis.send(userDefinedEvent);
+
+        // Hokey, but we need to wait for the response to get through
+        // async processing in the lmax buffer
+        Thread.sleep(1_000);
+
+        // Verify the event
+        mockServerClient
+                .verify(
+                        request("/events")
+                                .withMethod("POST")
+                                .withBody(MAPPER.writerFor(UserDefinedEvent.class).writeValueAsString(userDefinedEvent)),
+                        VerificationTimes.once()
+                );
+    }
+
+    @Test
+    public void shouldSendMultipleHeartbeatEvents() throws Exception {
+        // Setup mock Praxis events endpoint
+        mockServerClient
+                .when(
+                        request("/events")
+                                .withMethod("POST")
+                )
+                .respond(
+                        response()
+                                .withStatusCode(202)
+                );
+
+        // Configure Praxis client
+        Praxis praxis = Praxis.builder()
+                .connect(mockServerClient.remoteAddress().getHostName(), mockServerClient.remoteAddress().getPort())
+                .heartbeat()
+                    .interval(Duration.ofMillis(100))
+                    .build()
+                .build();
+
+        // Hokey, but we need to wait for the response to get through
+        // async processing in the lmax buffer
+        Thread.sleep(1_000);
+
+        // Verify the event
+        mockServerClient
+                .verify(
+                        request("/events")
+                                .withMethod("POST"),
+                        VerificationTimes.atLeast(5)
+                );
+
+        mockServerClient.reset();
     }
 }
