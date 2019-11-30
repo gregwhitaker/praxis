@@ -17,6 +17,9 @@ Run the following command to build Praxis as a set of Docker images:
 
     ./gradlew clean buildImage
 
+## Example
+For an example of using Praxis in an application please refer to the [demo project](demo).
+
 ## Bugs and Feedback
 For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/praxis/issues).
 
