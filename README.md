@@ -13,7 +13,7 @@ This repository contains the following projects:
 - [demo](demo) - Simple demo application that sends events to Praxis.
 
 ## Building Praxis
-Run the following command to build Praxis:
+Run the following command to build Praxis as a set of Docker images:
 
     ./gradlew clean buildImage
 
