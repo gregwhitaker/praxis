@@ -18,6 +18,9 @@ package praxis.service.config.settings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Database configuration properties
+ */
 @Configuration
 @ConfigurationProperties(prefix = "praxis.database")
 public class DatabaseSettings {
