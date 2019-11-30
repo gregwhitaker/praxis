@@ -4,8 +4,8 @@ Sets up the PostgreSQL database required by Praxis.
 The database migration can be run as a standalone process for development purposes. However, when using the [praxis-service](../praxis-service), it
 will be automatically run on application startup.
 
-## Configuration
-The database migrator supports multiple methods of configuration.
+## Standalone Configuration
+The database migrator supports multiple methods of configuration when running as a standalone migration application:
 
 1. Environment Variables
 2. System Properties
@@ -42,6 +42,10 @@ The following command line arguments can be used to configure the database migra
 | --username | Database username |
 | --password | Database password |
 | --env      | Database environment name (controls which initial data is loaded)
+
+## Embedded Configuration
+This is the database migration method that is configured for the [praxis-service]. On startup the service will automatically
+run this database migration, if needed, based on the configuration of the service.
 
 ## Development
 
