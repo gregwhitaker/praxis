@@ -65,7 +65,7 @@ public class EventService {
     /**
      * Starts a process in the background for collecting and processing any missed events in the ledger.
      */
-    public void startOrphanRecordProcessing() {
+    private void startOrphanRecordProcessing() {
         Flux.interval(Duration.ofSeconds(10), Duration.ofMinutes(1))
                 .map(tick -> eventLedger.findUnprocessedEvents(100))
                 .flatMap((Function<Mono<List<UUID>>, Publisher<List<UUID>>>) listMono -> listMono)
