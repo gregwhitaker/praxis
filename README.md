@@ -1,5 +1,11 @@
 # praxis
-Generic event ingestion service.
+Service and clients for generating and ingesting application usage data.
+
+Provides a framework for ingesting and processing application heartbeats and monitoring how long a customer is using your
+application that is deployed in their infrastructure (ie. ingest phone home events).
+
+## Bugs and Feedback
+For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/praxis/issues).
 
 ## License
 Copyright 2019 Greg Whitaker
