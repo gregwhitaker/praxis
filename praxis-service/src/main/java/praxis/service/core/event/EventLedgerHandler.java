@@ -35,7 +35,7 @@ import java.util.Map;
  * Processes new events that are entered into the ledger.
  */
 @Component
-public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLedgerEvent> {
+public class EventLedgerHandler implements EventHandler<EventLedgerProcessor.ProcessLedgerEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(EventLedgerHandler.class);
 
     @Autowired
@@ -44,7 +44,7 @@ public class EventLedgerHandler implements EventHandler<EventProcessor.ProcessLe
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
-    public void onEvent(EventProcessor.ProcessLedgerEvent event, long sequence, boolean endOfBatch) throws Exception {
+    public void onEvent(EventLedgerProcessor.ProcessLedgerEvent event, long sequence, boolean endOfBatch) throws Exception {
         LOG.debug("Processing event: '{}'", event.getLedgerId());
 
         try (Connection conn = dataSource.getConnection()) {

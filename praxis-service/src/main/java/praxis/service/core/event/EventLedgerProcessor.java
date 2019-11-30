@@ -32,13 +32,13 @@ import java.util.UUID;
  * Ring buffer that holds events in the ledger that are ready for processing.
  */
 @Component
-public class EventProcessor {
-    private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
+public class EventLedgerProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(EventLedgerProcessor.class);
 
     private final RingBuffer<ProcessLedgerEvent> eventBuffer;
 
     @Autowired
-    public EventProcessor(EventLedgerHandler handler) {
+    public EventLedgerProcessor(EventLedgerHandler handler) {
         Disruptor<ProcessLedgerEvent> disruptor = new Disruptor<>(
                 ProcessLedgerEvent.EVENT_FACTORY,
                 1024,

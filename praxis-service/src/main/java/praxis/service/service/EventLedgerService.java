@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import praxis.service.core.event.EventProcessor;
+import praxis.service.core.event.EventLedgerProcessor;
 import praxis.service.data.event.EventLedgerDao;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -35,15 +35,15 @@ import java.util.function.Function;
  * Service that handles incoming events.
  */
 @Component
-public class EventService {
-    private static final Logger LOG = LoggerFactory.getLogger(EventService.class);
+public class EventLedgerService {
+    private static final Logger LOG = LoggerFactory.getLogger(EventLedgerService.class);
 
     private final EventLedgerDao eventLedger;
-    private final EventProcessor eventProcessor;
+    private final EventLedgerProcessor eventProcessor;
 
     @Autowired
-    public EventService(EventLedgerDao eventLedger,
-                        EventProcessor eventProcessor) {
+    public EventLedgerService(EventLedgerDao eventLedger,
+                              EventLedgerProcessor eventProcessor) {
         this.eventLedger = eventLedger;
         this.eventProcessor = eventProcessor;
 

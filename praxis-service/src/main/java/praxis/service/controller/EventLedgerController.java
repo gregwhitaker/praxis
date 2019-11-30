@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import praxis.service.service.EventService;
+import praxis.service.service.EventLedgerService;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
@@ -29,12 +29,12 @@ import java.util.function.Function;
  * Controller responsible for ingesting events into Praxis.
  */
 @RestController
-public class EventController {
+public class EventLedgerController {
 
-    private final EventService eventService;
+    private final EventLedgerService eventService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventLedgerController(EventLedgerService eventService) {
         this.eventService = eventService;
     }
 
