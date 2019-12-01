@@ -2,6 +2,7 @@ plugins {
     id "com.gradle.build-scan" version "3.0"
     id "net.saliman.properties" version "1.4.6"
     id "com.github.hierynomus.license" version "0.14.0"
+    id "com.adarshr.test-logger" version "2.0.0"
     id "org.springframework.boot" version "2.1.5.RELEASE" apply false
     id "io.spring.dependency-management" version "1.0.7.RELEASE" apply false
     id "com.google.protobuf" version "0.8.10" apply false
@@ -18,6 +19,7 @@ allprojects {
     apply plugin: "idea"
     apply plugin: "net.saliman.properties"
     apply plugin: "com.github.hierynomus.license"
+    apply plugin: "com.adarshr.test-logger"
 
     group = 'com.github.gregwhitaker'
     version = '0.1.0'
