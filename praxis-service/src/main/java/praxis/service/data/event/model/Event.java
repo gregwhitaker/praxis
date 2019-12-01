@@ -2,9 +2,7 @@ package praxis.service.data.event.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
