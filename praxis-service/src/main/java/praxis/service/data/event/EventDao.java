@@ -28,7 +28,7 @@ public class EventDao {
     public Mono<Event> findOne(UUID id) {
         return Mono.fromSupplier(() -> {
             try (Connection conn = dataSource.getConnection()) {
-                final String sql = "SELECT * FROM event WHERE evt_id = ?";
+                final String sql = "SELECT * FROM events WHERE evt_id = ?";
 
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setObject(1, id);
@@ -41,7 +41,7 @@ public class EventDao {
                 }
 
                 return null;
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 throw new RuntimeException("", e);
             }
         });

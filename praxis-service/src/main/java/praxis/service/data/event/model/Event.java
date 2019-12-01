@@ -1,13 +1,19 @@
 package praxis.service.data.event.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
 
 public class Event {
 
-    public static Event from(final ResultSet rs) throws SQLException {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    public static Event from(final ResultSet rs) throws Exception {
         Event event = new Event();
         event.setId(rs.getObject("evt_id", UUID.class));
         event.setCorrelationId(rs.getObject("evt_corr_id", UUID.class));
@@ -17,6 +23,7 @@ public class Event {
         event.setApplication(rs.getString("evt_app"));
         event.setInstance(rs.getString("evt_ins"));
         event.setEnvironment(rs.getString("evt_env"));
+        event.setAttributes(MAPPER.readerFor(Map.class).readValue(rs.getBytes("evt_attrs")));
 
         return event;
     }
@@ -29,6 +36,7 @@ public class Event {
     private String application;
     private String instance;
     private String environment;
+    private Map<String, Object> attributes;
 
     public UUID getId() {
         return id;
@@ -92,5 +100,13 @@ public class Event {
 
     public void setEnvironment(String environment) {
         this.environment = environment;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }
