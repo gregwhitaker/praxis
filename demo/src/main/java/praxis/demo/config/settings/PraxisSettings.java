@@ -17,7 +17,9 @@ package praxis.demo.config.settings;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
+@Primary
 @Configuration
 @ConfigurationProperties(prefix = "praxis")
 public class PraxisSettings {
