@@ -1,0 +1,28 @@
+version: "3.5"
+
+services:
+  praxis-db:
+    container_name: praxis-db
+    image: postgres
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=postgres"
+    ports:
+      - "5432:5432"
+
+  praxis-service:
+    container_name: praxis-service
+    image: praxis/praxis-service
+    environment:
+      - "SPRING_PROFILES_ACTIVE=localdocker"
+    depends_on:
+      - praxis-db
+
+  praxis-demo:
+    container_name: praxis-demo
+    image: praxis/demo
+    environment:
+      - "SPRING_PROFILES_ACTIVE=localdocker"
+    depends_on:
+      - praxis-service
