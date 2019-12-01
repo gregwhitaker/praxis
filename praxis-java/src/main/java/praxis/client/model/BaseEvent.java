@@ -60,4 +60,8 @@ public abstract class BaseEvent {
     public String getEnvironment() {
         return environment;
     }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 }

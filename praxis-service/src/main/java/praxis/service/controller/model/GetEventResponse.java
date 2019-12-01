@@ -3,7 +3,6 @@ package praxis.service.controller.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import praxis.service.core.ledger.model.EventType;
 import praxis.service.core.util.PraxisDateFormat;
 import praxis.service.data.event.model.Event;
 
@@ -26,10 +25,18 @@ public class GetEventResponse {
     public static GetEventResponse from(final Event event) {
         GetEventResponse response = new GetEventResponse();
         response.setId(event.getId().toString());
-        response.setCorrelationId(event.getCorrelationId().toString());
+
+        if (event.getCorrelationId() != null) {
+            response.setCorrelationId(event.getCorrelationId().toString());
+        }
+
         response.setType(event.getType());
         response.setTimestamp(PraxisDateFormat.format(event.getTimestamp()));
-        response.setProcessTimestamp(PraxisDateFormat.format(event.getProcessTimestamp()));
+
+        if (event.getProcessTimestamp() != null) {
+            response.setProcessTimestamp(PraxisDateFormat.format(event.getProcessTimestamp()));
+        }
+
         response.setApplication(event.getApplication());
         response.setInstance(event.getInstance());
         response.setEnvironment(event.getEnvironment());
