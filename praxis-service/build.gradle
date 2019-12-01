@@ -34,7 +34,7 @@ test {
 
 // Packaging
 task buildImage(type: DockerBuildImage, dependsOn: build) {
-    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName()}"]
+    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName().get()}"]
     dockerFile = file("${projectDir}/Dockerfile")
     inputDir = file("${projectDir}")
     tags = ["praxis/${projectDir.name}", "praxis/${projectDir.name}:${version}"]

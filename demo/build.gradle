@@ -11,14 +11,11 @@ dependencies {
     implementation project(':praxis-java')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.github.oshi:oshi-core:4.2.1'
-    implementation 'net.java.dev.jna:jna:5.5.0'
-    implementation 'net.java.dev.jna:jna-platform:5.5.0'
 }
 
 // Packaging
 task buildImage(type: DockerBuildImage, dependsOn: build) {
-    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName()}"]
+    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName().get()}"]
     dockerFile = file("${projectDir}/Dockerfile")
     inputDir = file("${projectDir}")
     tags = ["praxis/${projectDir.name}", "praxis/${projectDir.name}:${version}"]

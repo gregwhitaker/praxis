@@ -42,11 +42,3 @@ flyway {
     locations = ['filesystem:praxis-db/src/main/resources/db/migration',
                  'filesystem:praxis-db/src/main/resources/db/data/local']
 }
-
-// Packaging
-task buildImage(type: DockerBuildImage, dependsOn: build) {
-    buildArgs = ['JAR_FILE': "${jar.getArchiveFileName()}"]
-    dockerFile = file("${projectDir}/Dockerfile")
-    inputDir = file("${projectDir}")
-    tags = ["mfactor/${projectDir.name}", "mfactor/${projectDir.name}:${version}"]
-}
