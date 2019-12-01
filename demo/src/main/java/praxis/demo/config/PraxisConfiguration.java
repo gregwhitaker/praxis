@@ -16,16 +16,21 @@
 package praxis.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import praxis.client.Praxis;
 import praxis.client.PraxisBuilder;
+import praxis.demo.config.settings.PraxisSettings;
 
 import java.time.Duration;
 import java.util.UUID;
 
 @Configuration
+@EnableConfigurationProperties({
+        PraxisSettings.class
+})
 public class PraxisConfiguration {
 
     @Autowired
@@ -37,11 +42,11 @@ public class PraxisConfiguration {
      * @return praxis client
      */
     @Bean
-    public Praxis praxis() {
+    public Praxis praxis(PraxisSettings settings) {
         PraxisBuilder builder = Praxis.builder();
 
-        builder.connect("localhost", 8080)
-                .application("demo")
+        builder.connect(settings.getHostname(), settings.getPort())
+                .application("praxis-demo")
                 .heartbeat()
                     .interval(Duration.ofMinutes(1))
                     .build();

@@ -15,7 +15,9 @@ services:
     container_name: praxis-service
     image: praxis/praxis-service
     environment:
-      - "SPRING_PROFILES_ACTIVE=localdocker"
+      - "SPRING_PROFILES_ACTIVE=docker"
+    ports:
+      - "8080:8080"
     depends_on:
       - praxis-db
 
@@ -23,6 +25,6 @@ services:
     container_name: praxis-demo
     image: praxis/demo
     environment:
-      - "SPRING_PROFILES_ACTIVE=localdocker"
+      - "SPRING_PROFILES_ACTIVE=docker"
     depends_on:
       - praxis-service
