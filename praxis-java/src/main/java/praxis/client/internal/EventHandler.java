@@ -27,10 +27,14 @@ public class EventHandler implements com.lmax.disruptor.EventHandler<Event> {
     private static final Logger LOG = LoggerFactory.getLogger(EventHandler.class);
 
     private final String url;
-    private final OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient;
 
     public EventHandler(PraxisConfiguration config) {
         this.url = config.getBaseUrl() + "/events";
+
+        this.httpClient = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .build();
     }
 
     @Override
