@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import praxis.client.Praxis;
+import praxis.client.model.UserDefinedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +47,12 @@ public class HelloController {
     public ResponseEntity<?> hello(@RequestParam(value = "name", required = false, defaultValue = "You") String name) {
         Map<String, String> body = new HashMap<>();
         body.put("message", String.format("Hello, %s!", name));
+
+        praxis.send(new UserDefinedEvent.Builder()
+                .userEventType(11)
+                .application("demo")
+                .attribute("message", String.format("Hello, %s!", name))
+                .build());
 
         return ResponseEntity.ok(body);
     }
