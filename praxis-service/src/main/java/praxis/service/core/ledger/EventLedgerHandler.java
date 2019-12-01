@@ -81,6 +81,8 @@ public class EventLedgerHandler implements EventHandler<EventLedgerProcessor.Pro
                         // Updating the processed timestamp on the ledger
                         rs.updateTimestamp("led_process_ts", Timestamp.from(Instant.now()));
                         rs.updateRow();
+
+                        LOG.debug("Processed Event: '{}'", newEvent.getId().toString());
                     }
                 }
             }
